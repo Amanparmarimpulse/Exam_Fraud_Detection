@@ -16,7 +16,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import {Link, Navigate} from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 
-const pages = ['Home', 'Calls', 'Library' , 'Meeting'];
+const pages = ['Home', 'Calls', 'Proctoring Videos' , 'Live Proctoring'];
 const pagesLink = ['/' , '/calllist' , '/' , '/meeting']
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const action = ['/profile' , '/account' , '/home' , '/logout']

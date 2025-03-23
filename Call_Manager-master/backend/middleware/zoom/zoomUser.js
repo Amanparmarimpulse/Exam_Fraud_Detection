@@ -1,80 +1,136 @@
 const axios = require('axios');
 const dotenv = require('dotenv')
 dotenv.config();
-// Set your Zoom API key and secret
-const apiKey = process.env.ZOOM_MEETING_SDK_KEY;
-const apiSecret = process.env.ZOOM_MEETING_SDK_SECRET;
-const jwt = process.env.JWT
-// console.log('apiKey:' , apiKey)
-// console.log('apiSecret:' , apiSecret)
-// Set the email address of the user for whom you want to retrieve the user ID
-// const email = 'user@example.com';
 
-// Set the URL for the user API endpoint
-// const url = `https://api.zoom.us/v2/users/${encodeURIComponent(email)}`;
+// Zoom OAuth credentials
+const accountId = "CpzBeocTT9O-f7v3WrGV-g";
+const clientID = "1N00SyH4Ra2kcElCOKgQpw";
+const clientSecret = "w7drOnplQ52k4coqz4d7hbMmshNcw6ms";
 
-// Set the authorization header with your Zoom API key and secret
-const authHeader = {
-    'Authorization': `Bearer ${jwt}`
-};
+// OAuth token storage
+let accessToken = null;
+let tokenExpiry = null;
 
-async function getUserIdByEmailMiddleWare(email) {
-    // Send the HTTP GET request to the Zoom API to retrieve the user information
-    const url = `https://api.zoom.us/v2/users/${encodeURIComponent(email)}`;
-    await axios.get(url, { headers: authHeader })
-        .then(response => {
-            // Handle the response from the Zoom API here
-            console.log(response.data.id);
-        })
-        .catch(error => {
-            // Handle any errors that occur during the API call here
-            console.error(error);
-        });
-}
-
-async function createZoomUser(email , firstName , lastName , password){
-    const url =' https://api.zoom.us/v2/users'
-    const data = {
-        action:'create',
-        user_info:{
-            email:email,
-            type:1,
-            first_name:firstName,
-            last_name:lastName,
-            password:password
+/**
+ * Gets an OAuth access token from Zoom
+ * @returns {Promise<string>} - Promise resolving to the access token
+ */
+async function getZoomAccessToken() {
+    try {
+        // If we have a valid token that hasn't expired, return it
+        if (accessToken && tokenExpiry && new Date() < tokenExpiry) {
+            return accessToken;
         }
+
+        // Otherwise, get a new token
+        const response = await axios.post(
+            `https://zoom.us/oauth/token`,
+            new URLSearchParams({
+                grant_type: 'account_credentials',
+                account_id: accountId
+            }),
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                auth: {
+                    username: clientID,
+                    password: clientSecret
+                }
+            }
+        );
+
+        // Save the token and calculate expiry time
+        accessToken = response.data.access_token;
+        // Set expiry time (typically 1 hour = 3600 seconds)
+        tokenExpiry = new Date(Date.now() + (response.data.expires_in * 1000));
+
+        return accessToken;
+    } catch (error) {
+        console.error('Error getting Zoom access token:', error.message);
+        throw error;
     }
-
-    const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`,
-        },
-      };
-
-      try {
-        const response = await axios.post(url, data, config);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error.response.data);
-      }
 }
 
-async function getUserList(){
-    const url =' https://api.zoom.us/v2/users'
-    const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`,
-        },
-      };
-
-      try {
-        const response = await axios.get(url,  config);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error.response.data);
-      }
+/**
+ * Gets the authorization header for Zoom API requests
+ * @returns {Promise<Object>} - Promise resolving to the headers object
+ */
+async function getAuthHeaders() {
+    const token = await getZoomAccessToken();
+    return {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
 }
 
-module.exports= {getUserIdByEmailMiddleWare , createZoomUser , getUserList}
+/**
+ * Retrieves a Zoom user's ID by their email address
+ * @param {string} email - The email address of the Zoom user
+ * @returns {Promise<string>} - Promise resolving to the user ID
+ */
+async function getUserIdByEmail(email) {
+    try {
+        const url = `https://api.zoom.us/v2/users/${encodeURIComponent(email)}`;
+        const headers = await getAuthHeaders();
+        const response = await axios.get(url, { headers });
+        return response.data.id;
+    } catch (error) {
+        console.error('Error fetching user ID by email:', error.message);
+        throw error; // Propagate error to caller
+    }
+}
+
+/**
+ * Creates a new Zoom user in your account
+ * @param {string} email - The email address for the new user
+ * @param {string} firstName - The user's first name
+ * @param {string} lastName - The user's last name
+ * @param {string} password - The user's password
+ * @returns {Promise<Object>} - Promise resolving to the created user data
+ */
+async function createZoomUser(email, firstName, lastName, password) {
+    try {
+        const url = 'https://api.zoom.us/v2/users';
+        const data = {
+            action: 'create',
+            user_info: {
+                email: email,
+                type: 1, // 1 = Basic user type
+                first_name: firstName,
+                last_name: lastName,
+                password: password
+            }
+        };
+
+        const headers = await getAuthHeaders();
+        const response = await axios.post(url, data, { headers });
+        return response.data;
+    } catch (error) {
+        console.error('Error creating Zoom user:', error.response?.data || error.message);
+        throw error; // Propagate error to caller
+    }
+}
+
+/**
+ * Retrieves a list of all Zoom users in your account
+ * @returns {Promise<Object>} - Promise resolving to the list of users
+ */
+async function getUserList() {
+    try {
+        
+        const url = 'https://api.zoom.us/v2/users';
+        const headers = await getAuthHeaders();
+        const response = await axios.get(url, { headers });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching user list:', error.response?.data || error.message);
+        throw error; // Propagate error to caller
+    }
+}
+
+module.exports = {
+    getUserIdByEmail,
+    createZoomUser,
+    getUserList
+}

@@ -1,5 +1,5 @@
-import React , {useState , useEffect} from 'react'
-import Header from '../components/Header'
+import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
@@ -11,16 +11,19 @@ import Modal from '@mui/material/Modal';
 import AddContact from '../components/AddContact';
 import Box from '@mui/material/Box';
 
-const items = [{ person1: 'Sparsh', person2: 'Pranshi', date: 'March 26 2023', company: 'DRDO' },
-{ person1: 'Sparsh', person2: 'Pranshi', date: 'March 26 2023', company: 'DRDO' },
-{ person1: 'Sparsh', person2: 'Pranshi', date: 'March 26 2023', company: 'DRDO' },
-{ person1: 'Sparsh', person2: 'Pranshi', date: 'March 26 2023', company: 'DRDO' }
-]
+const items = [
+  { person1: 'Sparsh', person2: 'Pranshi', date: 'March 26 2023', company: 'DRDO' },
+  { person1: 'Sparsh', person2: 'Pranshi', date: 'March 26 2023', company: 'DRDO' },
+  { person1: 'Sparsh', person2: 'Pranshi', date: 'March 26 2023', company: 'DRDO' },
+  { person1: 'Sparsh', person2: 'Pranshi', date: 'March 26 2023', company: 'DRDO' }
+];
 
-const person = [{name:'Sparsh' , company:'ISRO'},{name:'Sparsh' , company:'ISRO'},
-{name:'Sparsh' , company:'ISRO'},
-{name:'Sparsh' , company:'ISRO'}
-]
+const person = [
+  { name: 'Sparsh', company: 'ISRO' },
+  { name: 'Sparsh', company: 'ISRO' },
+  { name: 'Sparsh', company: 'ISRO' },
+  { name: 'Sparsh', company: 'ISRO' }
+];
 
 const style = {
   position: 'absolute',
@@ -33,7 +36,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -78,21 +80,21 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function CallList() {
-  const [contact , setContact] = useState()
-  const [open, setOpen] = useState(false)
+  const [contact, setContact] = useState();
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  async function getContacts(){
+  async function getContacts() {
     const x = await getContactList();
-    console.log(x)
-    setContact(x)
+    console.log(x);
+    setContact(x);
   }
 
-  useEffect(()=>{
-    getContacts()
-  },[])
+  useEffect(() => {
+    getContacts();
+  }, []);
 
   return (
     <>
@@ -101,24 +103,24 @@ function CallList() {
         <div className='left-bar w-4/12'>
           <p className='text-2xl font-semibold'>Contacts</p>
           <div className='flex justify-between'>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <div className='flex items-center gap-x-2'>
-          <button className='bg-blue-600 text-white border-[1px] pt-1 pb-1 pl-4 pr-5 rounded-[50px]' onClick={handleOpen} >Add</button>
-          <p className='border-[1px]  border-gray-500 rounded-[20px] h-[30px] pr-4 pl-4 text-gray-500'>Sort By</p>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+            <div className='flex items-center gap-x-2'>
+              <button className='bg-blue-600 text-white border-[1px] pt-1 pb-1 pl-4 pr-5 rounded-[50px]' onClick={handleOpen}>Add</button>
+              <p className='border-[1px] border-gray-500 rounded-[20px] h-[30px] pr-4 pl-4 text-gray-500'>Sort By</p>
+            </div>
           </div>
-          </div>
-          <div className='flex flex-col gap-y-5'>
+          <div className='flex flex-col gap-y-5 mt-4'>
             {
-              contact ? contact.map(elem => 
-                <div className='flex items-center gap-x-4 pl-5'>
+              contact ? contact.map((elem, index) => 
+                <div key={index} className='flex items-center gap-x-4 pl-5'>
                   <div>
                     <Avatar src='https://mui.com/static/images/avatar/2.jpg' />
                   </div>
@@ -127,59 +129,56 @@ function CallList() {
                     <p className='text-[10px]'>{elem.contact}</p>
                   </div>
                 </div>
-                ) :''
+              ) : ''
             }
           </div>
         </div>
         <div className='right-bar w-7/12'>
           <p className='text-2xl font-semibold mb-4'>All Calls</p>
           <div className='sorting-option flex gap-x-4 border-[1px] border-gray-500 w-[250px] pl-5 rounded-[10px]'>
-            <p className='text-gray-500' >Sort By</p>
-            <p className='text-gray-500' >Date</p>
-            <p className='text-gray-500' >Call Duration</p>
+            <p className='text-gray-500'>Sort By</p>
+            <p className='text-gray-500'>Date</p>
+            <p className='text-gray-500'>Call Duration</p>
           </div>
           <div className='mt-4'>
             {
-              items ? items.map(elem =>
-                <Link to='/recording/video.mp4'>
+              items ? items.map((elem, index) =>
+                <Link key={index} to='/recording/video.mp4'>
                   <div className='flex gap-x-5 mb-5'>
-                  <div>
-                    <VideocamIcon fontSize='large' color='primary' />
-                  </div>
-                  <div className='flex flex-col mb-4'>
-                    <div className='flex'>
-                      <p className='font-semibold' >{elem.person1}</p>
-                      <p className='pl-2 pr-2'>and</p>
-                      <p className='font-semibold' >{elem.person2}</p>
-                      <p className='pl-2 font-bold'>{elem.company}</p>
+                    <div>
+                      <VideocamIcon fontSize='large' color='primary' />
                     </div>
-                    <div className='flex'>
-                      <p>{elem.date} ,</p>
-                      <p className='font-bold'>{elem.company}</p>
+                    <div className='flex flex-col mb-4'>
+                      <div className='flex'>
+                        <p className='font-semibold'>{elem.person1}</p>
+                        <p className='pl-2 pr-2'>and</p>
+                        <p className='font-semibold'>{elem.person2}</p>
+                        <p className='pl-2 font-bold'>{elem.company}</p>
+                      </div>
+                      <div className='flex'>
+                        <p>{elem.date},</p>
+                        <p className='font-bold ml-1'>{elem.company}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
                 </Link>
               ) : ''
             }
           </div>
         </div>
-       
       </div>
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      > 
-      <Box sx={style}>
-        <AddContact />
-      </Box>
-          
-        </Modal>
+      >
+        <Box sx={style}>
+          <AddContact />
+        </Box>
+      </Modal>
     </>
-
-  )
+  );
 }
 
-export default CallList
+export default CallList;

@@ -54,4 +54,4 @@ async function createMeeting(req , res){
     }
 }
 
-module.exports = {getCallLogsByUserId , getUserIdByEmail , createUser , getUsers , createMeeting}
+module.exports = {getCallLogsByUserId, getUserIdByEmail, createUser, getUsers, createMeeting}
