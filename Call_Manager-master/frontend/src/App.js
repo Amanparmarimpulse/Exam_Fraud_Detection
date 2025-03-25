@@ -5,6 +5,7 @@ import Meeting from "./pages/Meeting2";
 import Recording from "./pages/Recording";
 import SignIn from "./pages/signIn";
 import SignUp from "./pages/SignUp";
+import VideoSummary from "./pages/Videosummary";
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
         <Route path='/calllist' element={<CallList />} />
         <Route path='/meeting' element={<Meeting />} /> 
         <Route path="/recording/:file" element={<Recording />} />
-        
+        <Route path='/video-summary' element={<VideoSummary />} />
         {/* auth */}
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
