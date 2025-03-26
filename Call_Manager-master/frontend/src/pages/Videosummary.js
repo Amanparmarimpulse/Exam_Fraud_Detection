@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Videosummary.css';
-import Header from '../components/Header';
-import utils from '../components/utils';
+
 
 // Components that would be imported from separate files
 import ObjectTrackingViz from '../components/VideoAnalytics/ObjectTrackingViz';
