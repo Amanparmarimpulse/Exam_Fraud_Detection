@@ -896,7 +896,7 @@ const VideoSummary = () => {
             inputRef={videoInputRef}
             onDrop={handleDropVideo}
             onDragOver={handleDragEnter}
-            icon="movie"
+            icon="Video file"
           />
           
           <FileUploader
@@ -906,7 +906,7 @@ const VideoSummary = () => {
             inputRef={jsonInputRef}
             onDrop={handleDropJson}
             onDragOver={handleDragEnter}
-            icon="description"
+            icon="Json file"
           />
         </div>
         
