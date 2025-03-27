@@ -16,10 +16,10 @@ import AdbIcon from '@mui/icons-material/Adb';
 import {Link, Navigate} from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 
-const pages = ['Home', 'Proctoring Videos' , 'Live Proctoring','Video Summary'];
-const pagesLink = ['/' , '/' , '/meeting' , '/video-summary']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const action = ['/profile' , '/account' , '/home' , '/logout']
+const pages = ['Home', 'Live Proctoring','Video Summary'];
+const pagesLink = ['/' , '/meeting' , '/video-summary']
+const settings = [ 'Logout'];
+const action = ['/logout']
 
 
 function ResponsiveAppBar() {

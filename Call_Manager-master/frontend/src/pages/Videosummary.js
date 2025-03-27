@@ -9,16 +9,15 @@ import LabelDetectionViz from '../components/VideoAnalytics/LabelDetectionViz';
 import SpeechTranscriptionViz from '../components/VideoAnalytics/SpeechTranscriptionViz';
 import FaceDetectionViz from '../components/VideoAnalytics/FaceDetectionViz';
 import TextDetectionViz from '../components/VideoAnalytics/TextDetectionViz';
+import video from '../videos/test_video.mp4';
+import json from '../videos/test_json.json';
+import TabSwitchingViz from '../components/VideoAnalytics/Tab_windows_switching';
 
-// Import utility functions for bounding box drawing
-// Note: In a real implementation, you would import these from the correct location
-// import { draw_bounding_boxes, draw_bounding_box, nullable_time_offset_to_seconds } from '../utils/utils';
+
 
 // Utility functions for bounding box drawing (from utils.js)
 const draw_bounding_boxes = (object_tracks, ctx, currentTime, videoWidth, videoHeight) => {
-  // Clear the entire canvas
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
   object_tracks.forEach(trackedObject => {
     if (trackedObject.hasFramesForTime(currentTime)) {
       draw_bounding_box(
@@ -273,6 +272,55 @@ const FileUploader = ({
   );
 };
 
+// DataLimiter component to show limited number of items with View All button
+const DataLimiter = ({ children, initialLimit = 5 }) => {
+  const [showAll, setShowAll] = useState(false);
+  
+  // Clone children to get the array of React elements
+  const childrenArray = React.Children.toArray(children);
+  
+  // Determine if we need a limiter (if children exceed the limit)
+  const needsLimiter = childrenArray.length > initialLimit;
+  
+  // Slice the array based on the limit
+  const displayedChildren = showAll || !needsLimiter 
+    ? childrenArray 
+    : childrenArray.slice(0, initialLimit);
+  
+  return (
+    <div className="data-limiter">
+      {displayedChildren}
+      
+      {needsLimiter && (
+        <div className="view-all-container">
+          <button 
+            className="view-all-button"
+            onClick={() => setShowAll(!showAll)}
+          >
+            <span className="material-icons">
+              {showAll ? 'unfold_less' : 'unfold_more'}
+            </span>
+            <span>{showAll ? 'Show Less' : `View All (${childrenArray.length})`}</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// The visualization component with enhanced views
+const EnhancedVisualization = ({ type, component, countText }) => {
+  return (
+    <div className="visualization-wrapper">
+      <div className="visualization-header">
+        <h3 className="visualization-title">{type}</h3>
+        {countText && <span className="data-count">{countText}</span>}
+      </div>
+      {component}
+    </div>
+  );
+};
+
 const VideoSummary = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -288,15 +336,15 @@ const VideoSummary = () => {
   const [trackedObjects, setTrackedObjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [videoFileName, setVideoFileName] = useState(null);
-  const [jsonFileName, setJsonFileName] = useState(null);
   
-  const titleIdsDict = {
-                    'Label Detection': 'shot_label_annotations',
-                    'Object Tracking': 'object_annotations',
-                    'Face Detection': 'face_detection_annotations',
-                    'Speech Transcription': 'speech_transcriptions',
-                    'Text Detection': 'text_annotations',
-  };
+  // Wrap titleIdsDict in useMemo to prevent recreation on every render
+  const titleIdsDict = useMemo(() => ({
+    'Label Detection': 'shot_label_annotations',
+    'Object Tracking': 'object_annotations',
+    'Face Detection': 'face_detection_annotations',
+    'Speech Transcription': 'speech_transcriptions',
+    'Text Detection': 'text_annotations',
+  }), []);
 
   // Equivalent to Vue's computed properties
   const dataMisaligned = useMemo(() => {
@@ -333,8 +381,11 @@ const VideoSummary = () => {
   // Load initial test data
   useEffect(() => {
     setIsLoading(true);
-    loadJsonFromUrl("assets/test_json.json");
-    loadVideoFromUrl("assets/test_video.mp4");
+    // Use the imported JSON directly instead of trying to fetch it
+    setJsonData(json);
+    loadVideoFromUrl(video);
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Extract tracked objects from API data
@@ -424,6 +475,29 @@ const VideoSummary = () => {
 
   const loadVideoFromUrl = (url) => {
     if (videoRef.current) {
+      setIsLoading(true);
+      
+      // Add error handling
+      const handleVideoError = () => {
+        console.error('Error loading video:', url);
+        showNotification("Failed to load video. Please check the file format.", "error");
+        setIsLoading(false);
+        
+        // Clean up error listener
+        videoRef.current.removeEventListener('error', handleVideoError);
+      };
+      
+      // Clean up success listener
+      const handleLoadedData = () => {
+        setIsLoading(false);
+        videoRef.current.removeEventListener('loadeddata', handleLoadedData);
+      };
+      
+      // Add event listeners for success and error
+      videoRef.current.addEventListener('error', handleVideoError, { once: true });
+      videoRef.current.addEventListener('loadeddata', handleLoadedData, { once: true });
+      
+      // Set the video source
       videoRef.current.src = url;
     }
   };
@@ -457,55 +531,106 @@ const VideoSummary = () => {
         ctx.font = "16px Arial";
       }
       
-      setIsLoading(false);
-      
-      // Notify user about successful video loading
+      // Notify user about successful video loading with dimensions
       if (videoFileName) {
         showNotification(`Video loaded successfully: ${videoWidth}×${videoHeight}`, "success");
       }
     }
   };
 
-  const loadJsonFromUrl = async (url) => {
+  // Disable unused vars warning since this function is kept for future use
+  // eslint-disable-next-line no-unused-vars
+  const loadJsonFromUrl = async (jsonSource) => {
     try {
       setIsLoading(true);
-      const response = await fetch(url);
-      const data = await response.json();
+      
+      let data;
+      // If it's already a JSON object (imported) use it directly
+      if (typeof jsonSource === 'object') {
+        data = jsonSource;
+      } else {
+        // Otherwise fetch it from URL
+        const response = await fetch(jsonSource);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to load JSON: ${response.status} ${response.statusText}`);
+        }
+        
+        data = await response.json();
+      }
+      
       setJsonData(data);
       
       // Check validity of json
       if (!('annotation_results' in data)) {
-        showNotification("⚠️ Sorry, json output from shell not supported ⚠️ To fix set the 'output_uri' configuration when calling the Video Intelligence API.", "error");
+        showNotification("⚠️ Sorry, json output format not supported. Make sure to set the 'output_uri' configuration when calling the Video Intelligence API.", "error");
         if (jsonInputRef.current) {
           jsonInputRef.current.value = null;
         }
       } else {
         showNotification("JSON data loaded successfully!", "success");
       }
+      
       setIsLoading(false);
+      return data;
     } catch (error) {
       console.error('Error loading JSON:', error);
-      showNotification("Error loading JSON data", "error");
+      showNotification(`Error loading JSON: ${error.message}`, "error");
       setIsLoading(false);
-    }
-  };
-
-  const handleVideoChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setVideoFileName(file.name);
-      const fileUrl = URL.createObjectURL(file);
-      loadVideoFromUrl(fileUrl);
-      showNotification(`Video "${file.name}" loaded successfully!`, "success");
+      throw error;
     }
   };
 
   const handleJsonChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setJsonFileName(file.name);
+      showNotification(`Processing JSON file: ${file.name}`, "info");
+      
+      const fileReader = new FileReader();
+      fileReader.onload = async (e) => {
+        try {
+          // Parse the JSON content directly
+          const jsonContent = JSON.parse(e.target.result);
+          
+          // Process the JSON data
+          if (!('annotation_results' in jsonContent)) {
+            showNotification("⚠️ This JSON file doesn't contain Video Intelligence API results", "error");
+          } else {
+            setJsonData(jsonContent);
+            showNotification(`JSON file "${file.name}" loaded successfully!`, "success");
+          }
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
+          showNotification(`Error parsing JSON: ${error.message}`, "error");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      fileReader.onerror = () => {
+        showNotification("Failed to read the JSON file", "error");
+        setIsLoading(false);
+      };
+      
+      setIsLoading(true);
+      fileReader.readAsText(file);
+    }
+  };
+
+  const handleVideoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Check file size (limit to 100MB)
+      if (file.size > 100 * 1024 * 1024) {
+        showNotification("Video file is too large (>100MB). Please choose a smaller file.", "warning");
+        return;
+      }
+      
+      setVideoFileName(file.name);
+      showNotification(`Processing video: ${file.name}`, "info");
+      
       const fileUrl = URL.createObjectURL(file);
-      loadJsonFromUrl(fileUrl);
+      loadVideoFromUrl(fileUrl);
     }
   };
 
@@ -654,34 +779,82 @@ const VideoSummary = () => {
         </div>
       )}
 
-      {/* Visualization component */}
+      {/* Visualization component with data limiting */}
       <div className="visualization-container">
         {currentView === 'Object Tracking' && (
-          <ObjectTrackingViz 
-            jsonData={jsonData} 
-            videoInfo={videoInfo} 
-            onSegmentClicked={jumpVideo} 
+          <EnhancedVisualization
+            type="Object Tracking"
+            component={
+              <ObjectTrackingViz 
+                jsonData={jsonData} 
+                videoInfo={videoInfo} 
+                onSegmentClicked={jumpVideo}
+                renderItem={(items) => (
+                  <DataLimiter>
+                    {items}
+                  </DataLimiter>
+                )}
+              />
+            }
           />
         )}
 
         {currentView === 'Label Detection' && (
-          <LabelDetectionViz 
-            jsonData={jsonData} 
-            videoInfo={videoInfo} 
-            onSegmentClicked={jumpVideo} 
+          <EnhancedVisualization
+            type="Label Detection"
+            component={
+              <LabelDetectionViz 
+                jsonData={jsonData} 
+                videoInfo={videoInfo} 
+                onSegmentClicked={jumpVideo}
+                renderItem={(items) => (
+                  <DataLimiter>
+                    {items}
+                  </DataLimiter>
+                )}
+              />
+            }
           />
         )}
 
         {currentView === 'Speech Transcription' && (
-          <SpeechTranscriptionViz 
-            jsonData={jsonData} 
-            videoInfo={videoInfo} 
-            onWordClicked={jumpVideo} 
+          <EnhancedVisualization
+            type="Speech Transcription"
+            component={
+              <SpeechTranscriptionViz 
+                jsonData={jsonData} 
+                videoInfo={videoInfo} 
+                onWordClicked={jumpVideo}
+                renderItem={(items) => (
+                  <DataLimiter>
+                    {items}
+                  </DataLimiter>
+                )}
+              />
+            }
           />
         )}
 
         {currentView === 'Face Detection' && (
-          <FaceDetectionViz 
+          <EnhancedVisualization
+            type="Face Detection"
+            component={
+              <FaceDetectionViz 
+                jsonData={jsonData} 
+                videoInfo={videoInfo} 
+                onSegmentClicked={jumpVideo}
+                renderItem={(items) => (
+                  <DataLimiter>
+                    {items}
+                  </DataLimiter>
+                )}
+              />
+            }
+          />
+        )}
+
+        {currentView === 'Tab and Window Switching' && (
+          <TabSwitchingViz 
             jsonData={jsonData} 
             videoInfo={videoInfo} 
             onSegmentClicked={jumpVideo} 
@@ -689,10 +862,20 @@ const VideoSummary = () => {
         )}
 
         {currentView === 'Text Detection' && (
-          <TextDetectionViz 
-            jsonData={jsonData} 
-            videoInfo={videoInfo} 
-            onSegmentClicked={jumpVideo} 
+          <EnhancedVisualization
+            type="Text Detection"
+            component={
+              <TextDetectionViz 
+                jsonData={jsonData} 
+                videoInfo={videoInfo} 
+                onSegmentClicked={jumpVideo}
+                renderItem={(items) => (
+                  <DataLimiter>
+                    {items}
+                  </DataLimiter>
+                )}
+              />
+            }
           />
         )}
       </div>

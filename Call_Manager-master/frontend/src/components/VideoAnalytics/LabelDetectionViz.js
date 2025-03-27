@@ -1,178 +1,124 @@
-import React, { useState, useEffect } from 'react';
-import BaseVisualization from './BaseVisualization';
+import React, { useMemo } from 'react';
 
-/**
- * Component to visualize label detection results from Video Intelligence API
- */
-const LabelDetectionViz = ({ jsonData, videoInfo, onSegmentClicked }) => {
-  const [labelAnnotations, setLabelAnnotations] = useState([]);
-  const [shotLabelAnnotations, setShotLabelAnnotations] = useState([]);
-  
-  useEffect(() => {
-    // Extract label detection annotations from the API response
-    if (jsonData && jsonData.annotation_results) {
-      const labels = [];
-      const shotLabels = [];
+const nullable_time_offset_to_seconds = (time_offset) => {
+  if (!time_offset) return 0;
+
+  const seconds = time_offset.seconds || 0;
+  const nanos = time_offset.nanos ? time_offset.nanos / 1e9 : 0;
+  return seconds + nanos;
+};
+
+// Component to visualize label detection results
+const LabelDetectionViz = ({ jsonData, videoInfo, onSegmentClicked, renderItem }) => {
+  // Process and organize the label data
+  const labelData = useMemo(() => {
+    if (!jsonData.annotation_results) return [];
+
+    let labels = [];
+    
+    jsonData.annotation_results.forEach(result => {
+      // Process shot label annotations
+      if (result.shot_label_annotations) {
+        result.shot_label_annotations.forEach(label => {
+          if (label.segments) {
+            label.segments.forEach(segment => {
+              const startTime = nullable_time_offset_to_seconds(segment.segment?.start_time_offset);
+              const endTime = nullable_time_offset_to_seconds(segment.segment?.end_time_offset);
+              const confidence = segment.confidence || 0;
+              
+              labels.push({
+                type: 'shot',
+                description: label.entity?.description || 'Unknown',
+                confidence,
+                startTime,
+                endTime
+              });
+            });
+          }
+        });
+      }
       
-      jsonData.annotation_results.forEach(result => {
-        // Get regular video-level labels
-        if (result.label_annotations) {
-          labels.push(...result.label_annotations);
-        }
-        
-        // Get shot-level labels
-        if (result.shot_label_annotations) {
-          shotLabels.push(...result.shot_label_annotations);
-        }
-      });
-      
-      setLabelAnnotations(labels);
-      setShotLabelAnnotations(shotLabels);
-    }
+      // Process segment label annotations
+      if (result.segment_label_annotations) {
+        result.segment_label_annotations.forEach(label => {
+          if (label.segments) {
+            label.segments.forEach(segment => {
+              const startTime = nullable_time_offset_to_seconds(segment.segment?.start_time_offset);
+              const endTime = nullable_time_offset_to_seconds(segment.segment?.end_time_offset);
+              const confidence = segment.confidence || 0;
+              
+              labels.push({
+                type: 'segment',
+                description: label.entity?.description || 'Unknown',
+                confidence,
+                startTime,
+                endTime
+              });
+            });
+          }
+        });
+      }
+    });
+    
+    // Sort labels by confidence (highest first)
+    return labels.sort((a, b) => b.confidence - a.confidence);
   }, [jsonData]);
 
-  const handleSegmentClick = (seconds) => {
-    onSegmentClicked({ seconds });
-  };
-
-  // Calculate confidence color (green for high, red for low)
-  const getConfidenceColor = (confidence) => {
-    // Convert confidence to a color from red to green
-    const red = Math.floor(255 * (1 - confidence));
-    const green = Math.floor(255 * confidence);
-    return `rgb(${red}, ${green}, 0)`;
-  };
-
-  // Group labels by category
-  const renderLabels = () => {
-    if (labelAnnotations.length === 0 && shotLabelAnnotations.length === 0) {
-      return <p>No label detection data available in this video.</p>;
-    }
-    
-    return (
-      <div>
-        {renderVideoLabels()}
-        {renderShotLabels()}
-      </div>
-    );
-  };
-  
-  // Render video-level labels
-  const renderVideoLabels = () => {
-    if (labelAnnotations.length === 0) {
-      return null;
-    }
-    
-    return (
-      <div className="label-section">
-        <h4>Video Labels</h4>
-        <p className="label-description">These labels apply to the entire video</p>
-        <div className="label-grid">
-          {labelAnnotations.map((label, index) => (
-            <div key={`label-${index}`} className="label-item">
-              <div className="label-header">
-                <span className="label-name">{label.entity?.description || 'Unknown'}</span>
-                <span className="label-confidence">
-                  {(label.frames?.[0]?.confidence * 100 || label.confidence * 100).toFixed(1)}%
-                </span>
-              </div>
-              <div 
-                className="confidence-bar" 
-                style={{ 
-                  width: `${(label.frames?.[0]?.confidence || label.confidence) * 100}%`,
-                  backgroundColor: getConfidenceColor(label.frames?.[0]?.confidence || label.confidence)
-                }}
-              />
-              {label.categories && label.categories.length > 0 && (
-                <div className="label-categories">
-                  <small>
-                    Categories: {label.categories.map(cat => cat.name || cat.description).join(', ')}
-                  </small>
-                </div>
-              )}
-            </div>
-          ))}
+  // Create UI elements for label items
+  const labelItems = useMemo(() => {
+    return labelData.map((label, index) => (
+      <div 
+        key={`${label.description}-${index}`}
+        className="label-item"
+        onClick={() => onSegmentClicked({ 
+          seconds: label.startTime,
+          description: label.description
+        })}
+      >
+        <div className="segment-header">
+          <div className="segment-title">
+            <span className="material-icons">label</span>
+            {label.description}
+          </div>
+          <div className="segment-time">
+            <span className="material-icons">schedule</span>
+            {Math.floor(label.startTime / 60)}:{Math.floor(label.startTime % 60).toString().padStart(2, '0')} - 
+            {Math.floor(label.endTime / 60)}:{Math.floor(label.endTime % 60).toString().padStart(2, '0')}
+          </div>
+        </div>
+        
+        <div className="confidence-indicator">
+          <div className="confidence-bar-container">
+            <div 
+              className="confidence-bar" 
+              style={{ width: `${(label.confidence * 100).toFixed(0)}%` }}
+            ></div>
+          </div>
+          <div className="confidence-value">{(label.confidence * 100).toFixed(0)}%</div>
         </div>
       </div>
-    );
-  };
-  
-  // Render shot-level labels
-  const renderShotLabels = () => {
-    if (shotLabelAnnotations.length === 0) {
-      return null;
-    }
-    
-    return (
-      <div className="label-section">
-        <h4>Shot Labels</h4>
-        <p className="label-description">
-          These labels apply to specific segments of the video. 
-          Click on a segment to jump to that point.
-        </p>
-        
-        {shotLabelAnnotations.map((label, labelIndex) => (
-          <div key={`shot-label-${labelIndex}`} className="detection-item">
-            <h5>{label.entity?.description || 'Unknown'}</h5>
-            {label.segments && label.segments.map((segment, segmentIndex) => (
-              <div 
-                key={`segment-${labelIndex}-${segmentIndex}`}
-                className="clickable-segment"
-                onClick={() => handleSegmentClick(segment.segment?.start_time_offset?.seconds || 0)}
-              >
-                <span className="timestamp">
-                  {segment.segment?.start_time_offset?.seconds || 0}s
-                </span> to <span className="timestamp">
-                  {segment.segment?.end_time_offset?.seconds || 0}s
-                </span>
-                {' '}- Confidence: {(segment.confidence * 100).toFixed(1)}%
-                <div 
-                  className="confidence-bar" 
-                  style={{ 
-                    width: `${segment.confidence * 100}%`,
-                    backgroundColor: getConfidenceColor(segment.confidence)
-                  }}
-                />
-              </div>
-            ))}
-            
-            {label.frames && label.frames.length > 0 && (
-              <div className="label-frames">
-                <small>
-                  Appears in {label.frames.length} frames
-                  {label.frames.length > 0 && (
-                    <span className="clickable-timestamp" onClick={() => handleSegmentClick(label.frames[0].time_offset?.seconds || 0)}>
-                      {' '}(first at {label.frames[0].time_offset?.seconds || 0}s)
-                    </span>
-                  )}
-                </small>
-              </div>
-            )}
-            
-            {label.categories && label.categories.length > 0 && (
-              <div className="label-categories">
-                <small>
-                  Categories: {label.categories.map(cat => cat.name || cat.description).join(', ')}
-                </small>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    );
-  };
+    ));
+  }, [labelData, onSegmentClicked]);
 
-  return (
-    <BaseVisualization title="Label Detection">
-      <div className="label-detection-container">
-        <p>
-          This visualization shows objects, scenes, and activities detected in the video.
-          Click on any segment to jump to that point in the video.
-        </p>
-        {renderLabels()}
+  // If no data found
+  if (labelItems.length === 0) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">
+          <span className="material-icons">label_off</span>
+        </div>
+        <h3>No Label Detection Data</h3>
+        <p>No labels were detected in this video or the data is not available.</p>
       </div>
-    </BaseVisualization>
+    );
+  }
+
+  // Use the renderItem prop if provided, otherwise return all items
+  return (
+    <div className="label-detection-viz">
+      {renderItem ? renderItem(labelItems) : labelItems}
+    </div>
   );
 };
 
-export default LabelDetectionViz; 
+export default LabelDetectionViz;

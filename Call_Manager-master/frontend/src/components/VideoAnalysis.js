@@ -151,6 +151,18 @@ function VideoAnalysis({ file, videoUrl }) {
               </ul>
             </div>
 
+            {/* Tab and window switching Section */}
+            <div className="mb-4">
+              <h4 className="font-bold">Detected Objects:</h4>
+              <ul className="list-disc pl-5">
+                {analysisData?.objects?.map((obj, i) => (
+                  <li key={i}>
+                    {obj.entity} - Confidence: {Math.round(obj.confidence * 100)}%
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             {/* Faces Section */}
             <div className="mb-4">
               <h4 className="font-bold">Detected Faces:</h4>
