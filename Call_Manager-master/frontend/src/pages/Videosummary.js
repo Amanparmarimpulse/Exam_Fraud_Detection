@@ -217,7 +217,7 @@ const AnnotationsNav = ({ titleIdsDict, currentView, detectedFeatures, onNavClic
           onClick={onNavClicked}
         />
       ))}
-    </div>
+            </div>
   );
 };
 
@@ -315,9 +315,9 @@ const EnhancedVisualization = ({ type, component, countText }) => {
       <div className="visualization-header">
         <h3 className="visualization-title">{type}</h3>
         {countText && <span className="data-count">{countText}</span>}
-      </div>
+            </div>
       {component}
-    </div>
+            </div>
   );
 };
 
@@ -339,11 +339,11 @@ const VideoSummary = () => {
   
   // Wrap titleIdsDict in useMemo to prevent recreation on every render
   const titleIdsDict = useMemo(() => ({
-    'Label Detection': 'shot_label_annotations',
-    'Object Tracking': 'object_annotations',
-    'Face Detection': 'face_detection_annotations',
-    'Speech Transcription': 'speech_transcriptions',
-    'Text Detection': 'text_annotations',
+                    'Label Detection': 'shot_label_annotations',
+                    'Object Tracking': 'object_annotations',
+                    'Face Detection': 'face_detection_annotations',
+                    'Speech Transcription': 'speech_transcriptions',
+                    'Text Detection': 'text_annotations',
   }), []);
 
   // Equivalent to Vue's computed properties

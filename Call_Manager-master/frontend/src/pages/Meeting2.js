@@ -39,7 +39,7 @@ function App() {
     downloadLink.download = name;
     document.body.appendChild(downloadLink);
     downloadLink.click();
-        
+
         setSuccessMessage('Video download started!');
         setTimeout(() => setSuccessMessage(''), 3000);
 
