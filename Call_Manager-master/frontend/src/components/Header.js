@@ -84,7 +84,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            EXAM FRAUD 
+          Proctoring
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
