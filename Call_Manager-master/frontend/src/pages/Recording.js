@@ -5,8 +5,7 @@ import { getSignedUrlApi } from '../api/api';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import ScriptView from '../components/ScriptView';
-import VideoAnalysis from '../components/VideoAnalysis';
+// import VideoAnalysis from '../components/VideoAnalysis';
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -79,9 +78,9 @@ function Recording() {
       case 0:
         return <video src={url} className='h-[80vh]' controls />;
       case 1:
-        return <ScriptView file={file} />;
+        return 0;
       case 2:
-        return <VideoAnalysis file={file} videoUrl={url} />;
+        return 0;
       default:
         return null;
     }
