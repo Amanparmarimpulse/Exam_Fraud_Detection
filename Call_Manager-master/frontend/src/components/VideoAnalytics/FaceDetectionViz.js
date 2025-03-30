@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import BaseVisualization from './BaseVisualization';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Helper functions
 const nullable_time_offset_to_seconds = (time_offset) => {
@@ -94,21 +95,63 @@ class FaceTrack {
   }
 }
 
-// React component for bar chart
+// React component for bar chart with animation
 const BarChart = ({ label, percent }) => {
-  const barStyle = {
-    width: `${percent}%`,
-    backgroundColor: 'var(--danger-color)',
-    height: '8px',
-    borderRadius: '4px'
+  // Determine color based on value
+  const getBarColor = (value) => {
+    if (value >= 80) return 'var(--primary-color, #4CAF50)';
+    if (value >= 50) return 'var(--warning-color, #FF9800)';
+    return 'var(--danger-color, #F44336)';
   };
 
   return (
     <div className="bar-chart">
-      <div className="bar-label">{label} - {parseInt(percent)}%</div>
-      <div className="bar-container">
-        <div className="bar" style={barStyle}></div>
+      <div className="bar-label">
+        <span className="label-text">{label}</span>
+        <span className="percent-text">{parseInt(percent)}%</span>
       </div>
+      <div className="bar-container">
+        <motion.div 
+          className="bar" 
+          initial={{ width: 0 }}
+          animate={{ width: `${percent}%` }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{ 
+            backgroundColor: getBarColor(percent),
+            height: '8px',
+            borderRadius: '4px'
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Badge component for confidence
+const ConfidenceBadge = ({ confidence }) => {
+  // Choose badge color based on confidence
+  const getBadgeColor = (value) => {
+    if (value >= 0.8) return '#4CAF50';
+    if (value >= 0.5) return '#FF9800';
+    return '#F44336';
+  };
+
+  const badgeStyle = {
+    backgroundColor: getBadgeColor(confidence),
+    color: '#fff',
+    borderRadius: '12px',
+    padding: '2px 8px',
+    fontSize: '12px',
+    fontWeight: 'bold',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+  };
+
+  return (
+    <div className="confidence-badge" style={badgeStyle}>
+      {Math.round(confidence * 100)}%
     </div>
   );
 };
@@ -116,6 +159,8 @@ const BarChart = ({ label, percent }) => {
 // Main face detection component
 const FaceDetectionViz = ({ jsonData, videoInfo, onSegmentClicked, renderItem }) => {
   const [confidenceThreshold, setConfidenceThreshold] = useState(0.5);
+  const [activeSegment, setActiveSegment] = useState(null);
+  const [hoveredFace, setHoveredFace] = useState(null);
 
   // Extract face detection data
   const faceTracks = useMemo(() => {
@@ -141,7 +186,8 @@ const FaceDetectionViz = ({ jsonData, videoInfo, onSegmentClicked, renderItem })
         indexed_tracks.push(new FaceTrack(element, videoInfo.height, videoInfo.width));
     });
 
-    return indexed_tracks;
+    // Sort by confidence (highest first)
+    return indexed_tracks.sort((a, b) => b.confidence - a.confidence);
   }, [faceTracks, confidenceThreshold, videoInfo.height, videoInfo.width]);
 
   // Create timeline segments for faces
@@ -169,46 +215,100 @@ const FaceDetectionViz = ({ jsonData, videoInfo, onSegmentClicked, renderItem })
   }, [indexedFaceTracks]);
 
   // Style for timeline segments
-  const getSegmentStyle = (segment) => {
+  const getSegmentStyle = (segment, isActive) => {
     return {
       left: `${(segment[0] / videoInfo.length) * 100}%`,
-      width: `${((segment[1] - segment[0]) / videoInfo.length) * 100}%`
+      width: `${((segment[1] - segment[0]) / videoInfo.length) * 100}%`,
+      backgroundColor: isActive ? 'var(--primary-color, #4CAF50)' : 'var(--secondary-color, #2196F3)',
+      height: isActive ? '12px' : '8px',
+      top: isActive ? '-2px' : '0',
+      zIndex: isActive ? 2 : 1,
+      boxShadow: isActive ? '0 2px 4px rgba(0,0,0,0.2)' : 'none'
     };
   };
 
   // Handle segment click
-  const handleSegmentClick = (seconds) => {
+  const handleSegmentClick = (seconds, segmentIndex) => {
+    setActiveSegment(segmentIndex);
     onSegmentClicked({ seconds });
+  };
+
+  // Format time in MM:SS format
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Animation variants for list items
+  const listItemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: i => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }),
+    hover: {
+      scale: 1.02,
+      boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+      transition: { duration: 0.3 }
+    }
   };
 
   // Render face items
   const renderFaceItems = () => {
     const items = indexedFaceTracks.map((face, index) => (
-      <div key={index} className="face-item" onClick={() => handleSegmentClick(face.start_time)}>
+      <motion.div 
+        key={index} 
+        className={`face-item ${hoveredFace === index ? 'hovered' : ''}`}
+        initial="hidden"
+        animate="visible"
+        whileHover="hover"
+        custom={index}
+        variants={listItemVariants}
+        onClick={() => handleSegmentClick(face.start_time, index)}
+        onMouseEnter={() => setHoveredFace(index)}
+        onMouseLeave={() => setHoveredFace(null)}
+      >
         <div className="face-header">
           <div className="face-id">
             <span className="material-icons">face</span>
-            Face {index + 1}
+            <span className="face-label">Face {index + 1}</span>
+            <span className="face-time">{formatTime(face.start_time)} - {formatTime(face.end_time)}</span>
           </div>
-          <div className="confidence-badge">
-            {Math.round(face.confidence * 100)}%
-          </div>
+          <ConfidenceBadge confidence={face.confidence} />
         </div>
         
-        <div className="face-thumbnail">
-          {face.thumbnail ? (
-            <img alt="Face thumbnail" src={`data:image/png;base64, ${face.thumbnail}`} />
-          ) : (
-            <span className="material-icons">face</span>
-          )}
+        <div className="face-content">
+          <div className="face-thumbnail">
+            {face.thumbnail ? (
+              <img alt="Face thumbnail" src={`data:image/png;base64, ${face.thumbnail}`} />
+            ) : (
+              <div className="thumbnail-placeholder">
+                <span className="material-icons">face</span>
+              </div>
+            )}
+          </div>
+          
+          <div className="face-attributes">
+            {Object.entries(face.attributes).length > 0 ? (
+              Object.entries(face.attributes).map(([key, value], attrIndex) => (
+                <BarChart 
+                  key={attrIndex} 
+                  label={key.replace(/_/g, ' ')} 
+                  percent={value * 100} 
+                />
+              ))
+            ) : (
+              <div className="no-attributes">No attribute data available</div>
+            )}
+          </div>
         </div>
-        
-        <div className="face-attributes">
-          {Object.entries(face.attributes).map(([key, value], attrIndex) => (
-            <BarChart key={attrIndex} label={key.replace('_', ' ')} percent={value * 100} />
-          ))}
-        </div>
-      </div>
+      </motion.div>
     ));
 
     return renderItem ? renderItem(items) : items;
@@ -217,59 +317,127 @@ const FaceDetectionViz = ({ jsonData, videoInfo, onSegmentClicked, renderItem })
   return (
     <BaseVisualization title="Face Detection">
       <div className="face-detection-container">
-        <div className="confidence">
-          <span>Confidence threshold</span>
-          <input 
-            type="range" 
-            min="0.0" 
-            max="1" 
-            step="0.01" 
-            value={confidenceThreshold}
-            onChange={(e) => setConfidenceThreshold(parseFloat(e.target.value))}
-          />
-          <span className="confidence-value">{confidenceThreshold}</span>
-        </div>
-
-        {faceTracks.length === 0 && (
-          <div className="empty-state">
-            <div className="empty-icon">
-              <span className="material-icons">sentiment_dissatisfied</span>
+        <div className="control-panel">
+          <div className="confidence-slider">
+            <label>Confidence threshold: <span className="threshold-value">{(confidenceThreshold * 100).toFixed(0)}%</span></label>
+            <div className="slider-container">
+              <input 
+                type="range" 
+                min="0.0" 
+                max="1" 
+                step="0.01" 
+                value={confidenceThreshold}
+                onChange={(e) => setConfidenceThreshold(parseFloat(e.target.value))}
+                className="modern-slider"
+              />
+              <div className="slider-markers">
+                <span>0%</span>
+                <span>50%</span>
+                <span>100%</span>
+              </div>
             </div>
-            <h3>No Face Detection Data</h3>
-            <p>There are no faces detected in this video, or the JSON data doesn't contain face detection results.</p>
           </div>
-        )}
 
-        {faceTracks.length > 0 && (
-          <>
-            <div className="face-count">
-              <span className="material-icons">face</span>
-              {indexedFaceTracks.length} faces detected
-            </div>
-
-            {Object.entries(objectTrackSegments).map(([key, segmentData]) => (
-              <div className="segment-container" key={key}>
-                <div className="label">{key} ({segmentData.count})</div>
-                <div className="segment-timeline">
-                  {segmentData.segments.map((segment, index) => (
-                    <div 
-                      className="segment" 
-                      key={index}
-                      style={getSegmentStyle(segment)} 
-                      onClick={() => handleSegmentClick(segment[0])}
-                    ></div>
-                  ))}
+          {faceTracks.length > 0 && (
+            <div className="face-stats">
+              <div className="stat-item">
+                <span className="material-icons">groups</span>
+                <div className="stat-content">
+                  <div className="stat-value">{indexedFaceTracks.length}</div>
+                  <div className="stat-label">Faces Detected</div>
                 </div>
               </div>
-            ))}
-
-            <div className="face-detection-viz">
-              <div className="face-list">
-                {renderFaceItems()}
+              <div className="stat-item">
+                <span className="material-icons">timelapse</span>
+                <div className="stat-content">
+                  <div className="stat-value">
+                    {objectTrackSegments.face?.segments.reduce((acc, segment) => acc + (segment[1] - segment[0]), 0).toFixed(1)}s
+                  </div>
+                  <div className="stat-label">Face Time</div>
+                </div>
               </div>
             </div>
-          </>
-        )}
+          )}
+        </div>
+
+        <AnimatePresence mode="wait">
+          {faceTracks.length === 0 ? (
+            <motion.div 
+              className="empty-state"
+              key="empty"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="empty-icon">
+                <span className="material-icons">sentiment_dissatisfied</span>
+              </div>
+              <h3>No Face Detection Data</h3>
+              <p>There are no faces detected in this video, or the JSON data doesn't contain face detection results.</p>
+              <button className="try-again-btn" onClick={() => setConfidenceThreshold(0.1)}>
+                Try Lower Threshold
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div 
+              className="results-container"
+              key="results"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="timeline-section">
+                <h3 className="section-title">Face Timeline</h3>
+                {Object.entries(objectTrackSegments).map(([key, segmentData]) => (
+                  <div className="segment-container" key={key}>
+                    <div className="segment-header">
+                      <div className="label">
+                        <span className="material-icons">face</span>
+                        {key} ({segmentData.count})
+                      </div>
+                      <div className="time-markers">
+                        <span>0:00</span>
+                        <span>{formatTime(videoInfo.length / 2)}</span>
+                        <span>{formatTime(videoInfo.length)}</span>
+                      </div>
+                    </div>
+                    <div className="segment-timeline">
+                      {segmentData.segments.map((segment, index) => (
+                        <motion.div 
+                          className="segment" 
+                          key={index}
+                          style={getSegmentStyle(segment, activeSegment === index)}
+                          whileHover={{ 
+                            height: '14px', 
+                            top: '-3px', 
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.3)' 
+                          }}
+                          onClick={() => handleSegmentClick(segment[0], index)}
+                        >
+                          <div className="segment-tooltip">
+                            {formatTime(segment[0])} - {formatTime(segment[1])}
+                          </div>
+                        </motion.div>
+                      ))}
+                      <div className="timeline-base"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="face-gallery-section">
+                <h3 className="section-title">Detected Faces</h3>
+                <div className="face-detection-viz">
+                  <div className="face-list">
+                    {renderFaceItems()}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </BaseVisualization>
   );

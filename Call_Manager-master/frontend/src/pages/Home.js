@@ -244,7 +244,7 @@ function Home() {
   
   return (
     <div className="min-h-screen">
-      <Header />
+    <Header />
       
       {/* Hero Section with Animated Elements */}
       <Box 

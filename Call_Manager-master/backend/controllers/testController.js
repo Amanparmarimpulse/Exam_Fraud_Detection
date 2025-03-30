@@ -11,25 +11,7 @@ async function getFS(req, res) {
     }
 }
 
-async function sampleAdd(req, res) {
-    try {
-        const docRef = db.collection('test')
-            .doc('firestore')
-            .collection('users')
-            .doc('me');
 
-        const x = await docRef.set({
-            first: 'Sparsh',
-            last: 'Jhariya',
-            born: 2002
-        });
-
-        res.status(201).json(x)
-
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 async function uploadViaURL(req , res){
     try {
