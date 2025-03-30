@@ -299,13 +299,13 @@ function Home() {
                   letterSpacing: '-0.02em'
                 }}
               >
-                Transform How You
+                Secure and reliable proctoring for Safe
                 <Box component="span" sx={{ 
                   display: 'block', 
                   color: '#00e5ff',
                   textShadow: '0 0 20px rgba(0,229,255,0.4)'
                 }}>
-                  Manage Meetings
+                  Online Assements
                 </Box>
               </MotionTypography>
               
@@ -321,9 +321,7 @@ function Home() {
                   lineHeight: 1.6 
                 }}
               >
-                Record, transcribe, analyze, and optimize your video meetings with our 
-                AI-powered platform. Take control of your communications and never miss 
-                a detail again.
+                Ensuring security and integrity in online assessments is crucial to maintaining fairness and credibility. Robust proctoring solutions, AI-driven monitoring, and encrypted platforms help prevent malpractice.
               </MotionTypography>
               
               <MotionBox 
