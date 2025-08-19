@@ -61,7 +61,11 @@ Fraudulent activities such as **identity theft** and **cheating** are prevalent,
   
  <img width="1033" height="493" alt="Image" src="https://github.com/user-attachments/assets/e07d564a-1f7f-435e-bc05-cc1a23ac9f05" />
 
-- **Secure Login/Signup** – Firebase authentication integrated with Firestore database.  
+- **Secure Login/Signup** – Firebase authentication integrated with Firestore database.
+
+<img width="1290" height="387" alt="Image" src="https://github.com/user-attachments/assets/2c547edc-1b34-4348-b3fe-c386f709ec6f" />
+
+<img width="1394" height="415" alt="Image" src="https://github.com/user-attachments/assets/9065d369-9dfa-4981-9144-0debb10a4604" />
 
 ---
 
