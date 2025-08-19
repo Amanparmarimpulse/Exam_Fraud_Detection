@@ -57,7 +57,10 @@ Fraudulent activities such as **identity theft** and **cheating** are prevalent,
 ---
 
 ## 🚀 Deployment
-- **Frontend** – Intuitive landing page guiding students through the exam process.  
+- **Frontend** – Intuitive landing page guiding students through the exam process.
+  
+ <img width="1033" height="493" alt="Image" src="https://github.com/user-attachments/assets/e07d564a-1f7f-435e-bc05-cc1a23ac9f05" />
+
 - **Secure Login/Signup** – Firebase authentication integrated with Firestore database.  
 
 ---
