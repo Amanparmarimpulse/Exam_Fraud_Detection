@@ -22,6 +22,8 @@ Fraudulent activities such as **identity theft** and **cheating** are prevalent,
 ---
 
 ## ⚙️ System Workflow
+<img width="1597" height="489" alt="Image" src="https://github.com/user-attachments/assets/12c01c4f-b31e-4d5a-afff-73e9c1e4edbc" />
+
 1. **Candidate Login** – Facial image and typing patterns captured.  
 2. **Biometric Authentication** – Identity verified using facial recognition & keystroke dynamics.  
 3. **Real-Time Monitoring** – Webcam, keyboard, and screen monitored with ML models.  
