@@ -5,15 +5,9 @@
 
 ---
 
- 
-# Autonomous Online Exam Fraud Detection
-
+## 📖 Overview
 Leveraging **AI** and **Machine Learning** for secure online assessments.  
-This project addresses the growing challenge of ensuring integrity in online exams by detecting cheating and verifying candidate identity in real time.  
 
----
-
-## 📌 Problem Statement
 With the rapid growth of online education, especially during and after COVID-19, ensuring fairness in online examinations has become critical.  
 Fraudulent activities such as **identity theft** and **cheating** are prevalent, making it necessary to develop robust, AI-driven fraud detection systems.  
 
@@ -45,12 +39,12 @@ Fraudulent activities such as **identity theft** and **cheating** are prevalent,
 - **Google Video Intelligence API** – Analyzes video for objects, faces, logos, text, and suspicious activity.  
 - **Plagiarism Detection** – Detects repeated persons, foreign objects, and unusual activities.  
 
----
-
-## 🧬 Biometric Authentication
-- **Facial Recognition** – CNN-based feature extraction (e.g., VGG-Face).  
-- **Keystroke Dynamics** – ML model trained on typing patterns.  
-- **Eye & Head Movement Tracking** – LSTM model classifies normal vs. suspicious behavior.  
+### 🚀 Advanced Detection Features
+- **Object Tracking** – Detects and tracks unauthorized objects in the environment.  
+- **Person Identification** – Verifies that the same person is present throughout the exam.  
+- **Face Recognition** – Detects multiple or unauthorized faces.  
+- **Speech Transcription** – Captures and analyzes suspicious audio activity.  
+- **Tab Switching Detection** – Flags when candidates attempt to switch windows/tabs.  
 
 ---
 
@@ -61,23 +55,6 @@ Fraudulent activities such as **identity theft** and **cheating** are prevalent,
 - **Authentication** – Firebase login & signup.  
 - **API** – Google Cloud Video Intelligence API for video analysis.  
 - **ML Models** – CNNs for face recognition, LSTMs for movement tracking, ML for keystroke dynamics.  
-
----
-
-## ✅ Benefits & Applications
-- Ensures **secure & fair assessments**.  
-- Scalable for **universities** and **corporate training**.  
-- Applicable to **government & competitive exams**.  
-- Cost-effective compared to traditional proctoring.  
-- User-friendly and stress-free for both students & administrators.  
-
----
-
-## 🔮 Future Scope
-- Smarter AI with advanced ML models.  
-- Multi-modal fraud detection (typing, mouse movement, voice).  
-- Blockchain for enhanced data security.  
-- Voice recognition for additional identity verification.  
 
 ---
 
@@ -97,7 +74,12 @@ Fraudulent activities such as **identity theft** and **cheating** are prevalent,
 ---
 
 ## 📌 Conclusion
-The **Autonomous Online Exam Fraud Detection System** leverages AI, ML, and biometrics to revolutionize online assessments. By ensuring **security, fairness, and scalability**, it paves the way for a future where online education is both **trustworthy and inclusive**.  
+The **Autonomous Online Exam Fraud Detection System** leverages AI, ML, and biometrics to revolutionize online assessments.  
 
+By deploying **5+ advanced detection features** like **Object Tracking, Person Identification, Face Recognition, Speech Transcription, and Tab Switching Detection**, this system ensures **security, fairness, and scalability**.  
 
-[final_ppt_mini.pptx](https://github.com/user-attachments/files/19279674/final_ppt_mini.pptx)
+It paves the way for a future where online education is both **trustworthy and inclusive**.  
+
+---
+
+📂 [Final Presentation](https://github.com/user-attachments/files/19279674/final_ppt_mini.pptx)  
