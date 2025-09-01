@@ -5,11 +5,7 @@
 
 ---
 
-Leveraging **AI** and **Machine Learning** for secure online assessments.  
-This project addresses the growing challenge of ensuring integrity in online exams by detecting cheating and verifying candidate identity in real time.  
-
-
-
+ 
 # Autonomous Online Exam Fraud Detection
 
 Leveraging **AI** and **Machine Learning** for secure online assessments.  
@@ -68,32 +64,12 @@ Fraudulent activities such as **identity theft** and **cheating** are prevalent,
 
 ---
 
-## 🚀 Deployment
-- **Frontend** – Intuitive landing page guiding students through the exam process.
-  
- <img width="1033" height="493" alt="Image" src="https://github.com/user-attachments/assets/e07d564a-1f7f-435e-bc05-cc1a23ac9f05" />
-
-- **Secure Login/Signup** – Firebase authentication integrated with Firestore database.
-
-<img width="1290" height="387" alt="Image" src="https://github.com/user-attachments/assets/2c547edc-1b34-4348-b3fe-c386f709ec6f" />
-
-<img width="1394" height="415" alt="Image" src="https://github.com/user-attachments/assets/9065d369-9dfa-4981-9144-0debb10a4604" />
-
----
-
 ## ✅ Benefits & Applications
 - Ensures **secure & fair assessments**.  
 - Scalable for **universities** and **corporate training**.  
 - Applicable to **government & competitive exams**.  
 - Cost-effective compared to traditional proctoring.  
 - User-friendly and stress-free for both students & administrators.  
-
----
-
-## ⚠️ Challenges
-- **Technical Issues** – Internet connectivity & video/audio glitches.  
-- **Privacy Concerns** – Continuous monitoring raises ethical issues.  
-- **System Limitations** – Potential to be tricked by tech-savvy users.  
 
 ---
 
