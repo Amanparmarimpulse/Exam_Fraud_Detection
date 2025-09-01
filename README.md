@@ -1,85 +1,73 @@
-# Autonomous Online Exam Fraud Detection
+# 🚀 Autonomous Online Exam Fraud Detection  
 
-## 🎥 Demo Video
+## 🎥 Demo Video  
 ▶️ [Watch Demo](https://drive.google.com/file/d/17aSot53-ntFL-OXYGqSGrNUgw-_NgQiq/view?usp=drive_link)  
 
 ---
 
-## 📖 Overview
-Leveraging **AI** and **Machine Learning** for secure online assessments.  
+## 📖 Overview  
+Leveraging **Artificial Intelligence (AI)** and **Machine Learning (ML)** for **secure online assessments**.  
 
-With the rapid growth of online education, especially during and after COVID-19, ensuring fairness in online examinations has become critical.  
-Fraudulent activities such as **identity theft** and **cheating** are prevalent, making it necessary to develop robust, AI-driven fraud detection systems.  
-
----
-
-## 🎯 Objectives
-- **AI Fraud Detection** – Real-time fraud detection using machine learning.  
-- **Identity Verification** – Accurate biometric verification with facial recognition and keystroke dynamics.  
-- **Privacy & Security** – Protect candidate data and ensure compliance.  
-- **Cheating Prevention** – Proactive monitoring to flag anomalies.  
-- **Scalability** – Support for large-scale exams across institutions.  
-- **User Experience** – Seamless and accessible interface for candidates and administrators.  
+With the rise of online education, especially after COVID-19, ensuring **fairness in online exams** has become critical.  
+This project combats **identity theft** and **cheating** using **biometric verification** and **real-time fraud detection**.  
 
 ---
 
-## ⚙️ System Workflow
-<img width="1597" height="489" alt="Image" src="https://github.com/user-attachments/assets/12c01c4f-b31e-4d5a-afff-73e9c1e4edbc" />
-
-1. **Candidate Login** – Facial image and typing patterns captured.  
-2. **Biometric Authentication** – Identity verified using facial recognition & keystroke dynamics.  
-3. **Real-Time Monitoring** – Webcam, keyboard, and screen monitored with ML models.  
-4. **Fraud Detection** – Suspicious activities flagged; proctor alerted.  
-5. **Post-Exam Analysis** – Detailed report generated with flagged incidents.  
-
----
-
-## 🔍 Fraud Detection Mechanisms
-- **Zoom SDK Recording** – Video feed captured.  
-- **Google Video Intelligence API** – Analyzes video for objects, faces, logos, text, and suspicious activity.  
-- **Plagiarism Detection** – Detects repeated persons, foreign objects, and unusual activities.  
-
-### 🚀 Advanced Detection Features
-- **Object Tracking** – Detects and tracks unauthorized objects in the environment.  
-- **Person Identification** – Verifies that the same person is present throughout the exam.  
-- **Face Recognition** – Detects multiple or unauthorized faces.  
-- **Speech Transcription** – Captures and analyzes suspicious audio activity.  
-- **Tab Switching Detection** – Flags when candidates attempt to switch windows/tabs.  
+## 🎯 Objectives  
+✔️ **AI Fraud Detection** – Detects suspicious activity in real time.  
+✔️ **Identity Verification** – Facial recognition + keystroke dynamics.  
+✔️ **Privacy & Security** – Protects candidate data with compliance.  
+✔️ **Cheating Prevention** – Proactive anomaly flagging.  
+✔️ **Scalability** – Handles large-scale institutional exams.  
+✔️ **User Experience** – Smooth interface for students & administrators.  
 
 ---
 
-## 🛠️ Technology Stack
-- **Frontend** – User-friendly UI for students & administrators.  
-- **Backend** – Secure authentication and monitoring system.  
-- **Database** – Firebase Firestore for user data storage.  
-- **Authentication** – Firebase login & signup.  
-- **API** – Google Cloud Video Intelligence API for video analysis.  
-- **ML Models** – CNNs for face recognition, LSTMs for movement tracking, ML for keystroke dynamics.  
+## 🔍 Fraud Detection Mechanisms  
+🔹 **Zoom SDK Recording** – Captures live exam feed  
+🔹 **Google Video Intelligence API** – Detects objects, faces, and suspicious activity  
+🔹 **Plagiarism Detection** – Identifies repeated persons, foreign objects, and anomalies  
+
+### 🚀 Advanced Detection Features  
+✨ **Object Tracking** – Unauthorized object detection  
+✨ **Person Identification** – Same candidate throughout exam  
+✨ **Face Recognition** – Detects multiple/unauthorized faces  
+✨ **Speech Transcription** – Monitors suspicious audio cues  
+✨ **Tab Switching Detection** – Flags tab/window switching  
 
 ---
 
-## 📚 References
-1. **Cloud Video Intelligence API Documentation** – Object & content detection features.  
-2. **ResearchGate Publication** – ML techniques for exam fraud detection.  
-3. **SciTePress Paper** – Cheating & plagiarism detection methods.  
+## 🛠️ Technology Stack  
+- 🎨 **Frontend** → User-friendly UI (React/HTML/CSS)  
+- ⚙️ **Backend** → Secure exam monitoring & fraud detection  
+- 🗄️ **Database** → Firebase Firestore  
+- 🔑 **Authentication** → Firebase login/signup  
+- 🤖 **AI/ML Models** → CNNs (Face Recognition), LSTMs (Movement), Keystroke Dynamics  
+- ☁️ **Cloud APIs** → Google Cloud Video Intelligence API  
 
 ---
 
-## 👥 Contributors
-- **Devika Verma (UI22EC19)**  
-- **Aman Parmar (UI22EC07)**  
+## 📚 References  
+1. 📖 **Cloud Video Intelligence API Docs** – Object & content detection  
+2. 📑 **ResearchGate Paper** – ML techniques for fraud detection  
+3. 📘 **SciTePress Publication** – Plagiarism & cheating detection  
+
+---
+
+## 👥 Contributors  
+👩‍💻 **Devika Verma (UI22EC19)**  
+👨‍💻 **Aman Parmar (UI22EC07)**  
 
 **Supervised by:** Dr. Sudeep Sharma, Associate Professor, IIIT Surat  
 
 ---
 
-## 📌 Conclusion
-The **Autonomous Online Exam Fraud Detection System** leverages AI, ML, and biometrics to revolutionize online assessments.  
+## 📌 Conclusion  
+The **Autonomous Online Exam Fraud Detection System** integrates **AI, ML, and biometrics** to ensure **secure and fair** online examinations.  
 
-By deploying **5+ advanced detection features** like **Object Tracking, Person Identification, Face Recognition, Speech Transcription, and Tab Switching Detection**, this system ensures **security, fairness, and scalability**.  
-
-It paves the way for a future where online education is both **trustworthy and inclusive**.  
-
----
+With **5+ advanced detection features** – Object Tracking, Person Identification, Face Recognition, Speech Transcription, and Tab Switching Detection – this system ensures:  
+✅ **Security**  
+✅ **Fairness**  
+✅ **Scalability**  
 
 📂 [Final Presentation](https://github.com/user-attachments/files/19279674/final_ppt_mini.pptx)  
