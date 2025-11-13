@@ -3,7 +3,7 @@ from google.cloud import videointelligence
 
 import time
 
-gcs_uri = "gs://recorded_video_analysis/Analysing_videos/1st.mp4"
+gcs_uri = "gs://recorded_video_analysis/Analysing_videos/Person use mobile.mp4"
 output_uri = "gs://recorded_video_analysis/Analysing_videos/output - {}.json".format(time.time())
 
 video_client = videointelligence.VideoIntelligenceServiceClient.from_service_account_file(
