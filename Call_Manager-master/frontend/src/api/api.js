@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const api = 'http://localhost:5050'
+const api = 'https://exam-fraud-detection.vercel.app/'
 
 export const uploadfileusingurl = async (url) =>{
     try {
