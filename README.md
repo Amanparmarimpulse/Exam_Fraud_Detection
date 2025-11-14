@@ -1,5 +1,10 @@
 # 🚀 Autonomous Online Exam Fraud Detection  
 
+## 🔗 Live Deployed Project  
+👉 **https://exam-fraud-detection-6i7f.vercel.app/**  
+
+---
+
 ## 🎥 Demo Video  
 ▶️ [Watch Demo](https://drive.google.com/file/d/17aSot53-ntFL-OXYGqSGrNUgw-_NgQiq/view?usp=drive_link)  
 
@@ -58,7 +63,8 @@ This project combats **identity theft** and **cheating** using **biometric verif
 👩‍💻 **Devika Verma (UI22EC19)**  
 👨‍💻 **Aman Parmar (UI22EC07)**  
 
-**Supervised by:** Dr. Sudeep Sharma, Associate Professor, IIIT Surat  
+**Supervised by:**  
+👨‍🏫 Dr. Sudeep Sharma, Associate Professor, IIIT Surat  
 
 ---
 
@@ -70,4 +76,4 @@ With **5+ advanced detection features** – Object Tracking, Person Identificati
 ✅ **Fairness**  
 ✅ **Scalability**  
 
-📂 [Final Presentation](https://github.com/user-attachments/files/19279674/final_ppt_mini.pptx)  
+📂 [Final Presentation](https://github.com/user-attachments/files/19279674/final_ppt_mini.pptx)
