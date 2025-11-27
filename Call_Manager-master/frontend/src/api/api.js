@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const api = 'https://exam-fraud-detection.vercel.app/'
+// Use HTTP for local development, HTTPS for production
+const api = process.env.REACT_APP_API_URL || 'http://localhost:5050'
 
 export const uploadfileusingurl = async (url) =>{
     try {

@@ -1,136 +1,148 @@
-// Import the functions you need from the SDKs you need
-const { initializeApp } = require("firebase/app");
-// const { getAnalytics } = require("firebase/analytics");
-const { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword, 
-    signOut,
-    GoogleAuthProvider,
-    signInWithCredential
-} = require('firebase/auth');
-const { firebaseConfig } = require('./fire');
+const admin = require('firebase-admin');
+const { OAuth2Client } = require('google-auth-library');
+const path = require('path');
+const fs = require('fs');
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// Initialize Firebase Admin SDK
+function initializeFirebaseAdmin() {
+    if (admin.apps.length > 0) return;
+    
+    const backendDir = path.join(__dirname, '..');
+    const files = [
+        'serviceAccountKey.json',
+        'exam-fraud-detection-firebase-adminsdk-fbsvc-8b6689a7a5.json',
+        ...fs.readdirSync(backendDir).filter(file => file.includes('firebase-adminsdk') && file.endsWith('.json'))
+    ];
+    
+    for (const file of files) {
+        const filePath = path.join(backendDir, file);
+        if (fs.existsSync(filePath)) {
+            try {
+                admin.initializeApp({ credential: admin.credential.cert(require(filePath)) });
+                return;
+            } catch (error) {
+                console.error(`Error loading ${file}:`, error.message);
+            }
+        }
+    }
+    
+    console.error("Firebase Admin initialization failed. Add service account key file to backend directory.");
+}
 
-console.log("Firebase initialized with config:", JSON.stringify({
-    projectId: firebaseConfig.projectId,
-    authDomain: firebaseConfig.authDomain
-}));
+initializeFirebaseAdmin();
+
+const auth = admin.auth();
+const GOOGLE_CLIENT_ID = '1018610670162-8rv5bar6jo564jrf7lqqina0tbkvbt7p.apps.googleusercontent.com';
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 async function signIn(req, res) {
     try {
-        console.log("Sign in attempt:", req.body.email);
-        const email = req.body.email;
-        const password = req.body.password;
-
-        if (!email || !password) {
-            return res.status(400).json({ error: "Email and password are required" });
+        const { idToken } = req.body;
+        if (!idToken) {
+            return res.status(400).json({ error: "idToken is required" });
         }
 
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            console.log("User signed in successfully:", user.email);
-            res.status(200).json(user);
-        } catch (authError) {
-            console.error("Sign in error:", authError.code, authError.message);
-            res.status(400).json({ 
-                error: true, 
-                code: authError.code, 
-                message: authError.message 
-            });
-        }
+        const decodedToken = await auth.verifyIdToken(idToken);
+        const userRecord = await auth.getUser(decodedToken.uid);
+        
+        res.status(200).json({
+            uid: userRecord.uid,
+            email: userRecord.email,
+            displayName: userRecord.displayName,
+            photoURL: userRecord.photoURL
+        });
     } catch (error) {
-        console.error("Server error during sign in:", error);
-        res.status(500).json({ error: "Server error during sign in" });
+        res.status(401).json({ 
+            error: true, 
+            code: error.code, 
+            message: error.message 
+        });
     }
 }
 
 async function signUp(req, res) {
     try {
-        console.log("Sign up attempt:", req.body.email);
-        const email = req.body.email;
-        const password = req.body.password;
-
+        const { email, password } = req.body;
         if (!email || !password) {
             return res.status(400).json({ error: "Email and password are required" });
         }
 
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            console.log("User created successfully:", user.email);
-            res.status(200).json(user);
-        } catch (authError) {
-            console.error("Sign up error:", authError.code, authError.message);
-            res.status(400).json({ 
-                error: true, 
-                code: authError.code, 
-                message: authError.message 
-            });
-        }
+        const userRecord = await auth.createUser({
+            email,
+            password,
+            emailVerified: false
+        });
+        
+        res.status(200).json({
+            uid: userRecord.uid,
+            email: userRecord.email,
+            displayName: userRecord.displayName,
+            photoURL: userRecord.photoURL
+        });
     } catch (error) {
-        console.error("Server error during sign up:", error);
-        res.status(500).json({ error: "Server error during sign up" });
+        res.status(400).json({ 
+            error: true, 
+            code: error.code, 
+            message: error.message 
+        });
     }
 }
 
 async function googleSignIn(req, res) {
     try {
-        console.log("Google sign in attempt");
-        const idToken = req.body.idToken;
-        
+        const { idToken } = req.body;
         if (!idToken) {
             return res.status(400).json({ error: "Google ID token is required" });
         }
 
-        try {
-            // Create a Google credential with the token
-            const credential = GoogleAuthProvider.credential(idToken);
-            
-            // Sign in with credential
-            const userCredential = await signInWithCredential(auth, credential);
-            const user = userCredential.user;
-            
-            console.log("User signed in with Google successfully:", user.email);
-            res.status(200).json(user);
-        } catch (authError) {
-            console.error("Google sign in error:", authError.code, authError.message);
-            res.status(400).json({ 
-                error: true, 
-                code: authError.code, 
-                message: authError.message 
-            });
+        const ticket = await googleClient.verifyIdToken({
+            idToken,
+            audience: GOOGLE_CLIENT_ID
+        });
+        
+        const payload = ticket.getPayload();
+        if (!payload.email) {
+            return res.status(400).json({ error: "Email not found in token" });
         }
+        
+        let userRecord;
+        try {
+            userRecord = await auth.getUserByEmail(payload.email);
+            
+            if (payload.picture && !userRecord.photoURL) {
+                await auth.updateUser(userRecord.uid, {
+                    photoURL: payload.picture,
+                    displayName: payload.name || userRecord.displayName
+                });
+                userRecord = await auth.getUser(userRecord.uid);
+            }
+        } catch (error) {
+            if (error.code === 'auth/user-not-found') {
+                userRecord = await auth.createUser({
+                    email: payload.email,
+                    displayName: payload.name,
+                    photoURL: payload.picture,
+                    emailVerified: payload.email_verified || false
+                });
+            } else {
+                throw error;
+            }
+        }
+        
+        res.status(200).json({
+            uid: userRecord.uid,
+            email: userRecord.email,
+            displayName: userRecord.displayName || payload.name,
+            photoURL: userRecord.photoURL || payload.picture
+        });
     } catch (error) {
-        console.error("Server error during Google sign in:", error);
-        res.status(500).json({ error: "Server error during Google sign in" });
+        res.status(400).json({ 
+            error: true, 
+            code: error.code || 'auth/unknown-error', 
+            message: error.message || 'Authentication failed'
+        });
     }
 }
 
-async function signOutFunction(req, res) {
-    try {
-        await signOut(auth);
-        console.log('User logged out successfully');
-        res.status(200).json({ 'logout': true });
-    } catch (error) {
-        console.error("Error logging out user:", error);
-        res.status(500).json({ error: "Error logging out" });
-    }
-}
-
-async function getCurrentUser(req, res) {
-    try {
-        const user = auth.currentUser;
-        res.status(200).json(user || null);
-    } catch (error) {
-        console.error("Error getting current user:", error);
-        res.status(500).json({ error: "Error getting current user" });
-    }
-}
-
-module.exports = { signIn, signOutFunction, signUp, getCurrentUser, googleSignIn };
+module.exports = { signIn, signUp, googleSignIn };
 

@@ -1,0 +1,28 @@
+# Python / Django artifacts
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# IDE/editor
+.idea/
+.vscode/
+
+# Uploaded assets / temp files
+uploaded_assets/
+service_accounts/
+*.json.tmp
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Pip
+pip-log.txt
+pip-delete-this-directory.txt
+
