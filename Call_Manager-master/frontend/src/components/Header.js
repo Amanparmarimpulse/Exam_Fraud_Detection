@@ -13,13 +13,11 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import {Link, Navigate} from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 
-const pages = ['Home', 'Live Proctoring','Video Summary'];
-const pagesLink = ['/' , '/meeting' , '/video-summary']
+const pages = ['Home', 'System Check', 'Live Proctoring','Video Summary'];
+const pagesLink = ['/' , '/system-check' , '/meeting' , '/video-summary']
 const settings = [ 'Logout'];
-const action = ['/logout']
 
 
 function ResponsiveAppBar() {
@@ -186,7 +184,7 @@ function ResponsiveAppBar() {
               <MenuItem key={setting} onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">
                   {
-                    setting=='Logout' ? <Button onClick={logOutUser}>Logout</Button> : setting
+                    setting==='Logout' ? <Button onClick={logOutUser}>Logout</Button> : setting
                   }
                   
                 </Typography>

@@ -7,10 +7,7 @@ import {
   Card, 
   Container, 
   Grid, 
-  // Paper, 
   Typography, 
-  // useTheme,
-  // useMediaQuery,
   Chip
 } from '@mui/material';
 
@@ -18,12 +15,11 @@ import {
 import { motion } from "framer-motion";
 
 // Icons - only keep the ones being used
-import VideocamIcon from '@mui/icons-material/Videocam';
-import PeopleIcon from '@mui/icons-material/People';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SettingsIcon from '@mui/icons-material/Settings';
+import SecurityIcon from '@mui/icons-material/Security';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 
 // Custom styled components
 const MotionContainer = motion(Container);
@@ -105,7 +101,6 @@ const features = [
     description: "Leverage AI to analyze video content for insights and patterns. ",
     icon: <VideoAnalysisIcon />,
     color: "linear-gradient(135deg, #6B46C1, #9F7AEA)",
-    lightColor: "rgba(159, 122, 234, 0.1)",
     shadowColor: "rgba(159, 122, 234, 0.3)"
   },
   {
@@ -113,7 +108,6 @@ const features = [
     description: "Detect and identify faces with high accuracy. ",
     icon: <FacialRecognitionIcon />,
     color: "linear-gradient(135deg, #2C7A7B, #4FD1C5)",
-    lightColor: "rgba(79, 209, 197, 0.1)",
     shadowColor: "rgba(79, 209, 197, 0.3)"
   },
   {
@@ -121,7 +115,6 @@ const features = [
     description: "Convert speech to text with advanced AI transcription.",
     icon: <SpeechAnalysisIcon />,
     color: "linear-gradient(135deg, #DD6B20, #F6AD55)",
-    lightColor: "rgba(246, 173, 85, 0.1)",
     shadowColor: "rgba(246, 173, 85, 0.3)"
   },
   {
@@ -129,7 +122,6 @@ const features = [
     description: "Extract and analyze text from video frames.",
     icon: <TextDetectionIcon />,
     color: "linear-gradient(135deg, #3182CE, #63B3ED)",
-    lightColor: "rgba(99, 179, 237, 0.1)",
     shadowColor: "rgba(99, 179, 237, 0.3)"
   },
   {
@@ -137,7 +129,6 @@ const features = [
     description: "Track and analyze object movements throughout video footage.",
     icon: <ObjectTrackingIcon />,
     color: "linear-gradient(135deg, #805AD5, #B794F4)",
-    lightColor: "rgba(183, 148, 244, 0.1)",
     shadowColor: "rgba(183, 148, 244, 0.3)"
   },
   {
@@ -145,32 +136,39 @@ const features = [
     description: "Check System during Exam tab or window is switch or not.",
     icon: <TabWindowSwitchingIcon />,
     color: "linear-gradient(135deg, #E53E3E, #FC8181)",
-    lightColor: "rgba(252, 129, 129, 0.1)",
     shadowColor: "rgba(252, 129, 129, 0.3)"
   }
 ];
 
-// Stats data
-const stats = [
+// Quick Actions data
+const quickActions = [
   {
-    value: "10,000+",
-    label: "Active Users",
-    icon: <PeopleIcon />
+    title: "System Check",
+    description: "Verify your system compatibility before starting the exam",
+    icon: <SystemUpdateAltIcon sx={{ fontSize: 32 }} />,
+    link: "/system-check",
+    color: "#00e5ff"
   },
   {
-    value: "500,000+",
-    label: "Meetings Recorded",
-    icon: <VideocamIcon />
+    title: "Start Proctoring",
+    description: "Begin a new online exam session with live monitoring",
+    icon: <PlayArrowIcon sx={{ fontSize: 32 }} />,
+    link: "/meeting",
+    color: "#00e5ff"
   },
   {
-    value: "99.9%",
-    label: "Uptime",
-    icon: <CheckCircleIcon />
+    title: "View Analytics",
+    description: "Review video summaries and analysis reports",
+    icon: <AnalyticsIcon sx={{ fontSize: 32 }} />,
+    link: "/video-summary",
+    color: "#00e5ff"
   },
   {
-    value: "25+",
-    label: "Integrations",
-    icon: <SettingsIcon />
+    title: "Security Features",
+    description: "AI-powered monitoring and detection capabilities",
+    icon: <SecurityIcon sx={{ fontSize: 32 }} />,
+    link: "#features",
+    color: "#00e5ff"
   }
 ];
 
@@ -217,10 +215,6 @@ const featureHighlight = {
 };
 
 function Home() {
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  // const isMedium = useMediaQuery(theme.breakpoints.down('md'));
-  
   // Animation variants
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -408,55 +402,308 @@ function Home() {
                   }
                 }}
               >
-                <img 
-                  src='https://www.freepnglogos.com/uploads/zoom-logo-png/zoom-png-logo-download-transparent-20.png' 
-                  alt='Video Conference Illustration' 
-                  style={{ 
+                <Box
+                  component="svg"
+                  viewBox="0 0 500 400"
+                  sx={{
                     maxWidth: '90%',
-                    maxHeight: '400px',
-                    filter: 'drop-shadow(0px 20px 40px rgba(0,0,0,0.3))'
+                    maxHeight: '450px',
+                    filter: 'drop-shadow(0px 25px 50px rgba(0,0,0,0.4))',
+                    width: '100%',
+                    height: 'auto'
                   }}
-                />
+                >
+                  <defs>
+                    {/* Background Gradient */}
+                    <linearGradient id="bgGradient3d" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#1a237e" stopOpacity="0.2"/>
+                      <stop offset="50%" stopColor="#1565c0" stopOpacity="0.15"/>
+                      <stop offset="100%" stopColor="#2196f3" stopOpacity="0.2"/>
+                    </linearGradient>
+                    
+                    {/* Screen Gradient with 3D effect */}
+                    <linearGradient id="screenGradient3d" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3"/>
+                      <stop offset="50%" stopColor="#e0e0e0" stopOpacity="0.2"/>
+                      <stop offset="100%" stopColor="#000000" stopOpacity="0.6"/>
+                    </linearGradient>
+                    
+                    {/* Laptop Base 3D Gradient */}
+                    <linearGradient id="laptopBase3d" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#606060" stopOpacity="0.9"/>
+                      <stop offset="50%" stopColor="#2a2a2a" stopOpacity="0.95"/>
+                      <stop offset="100%" stopColor="#1a1a1a" stopOpacity="0.9"/>
+                    </linearGradient>
+                    
+                    {/* Screen Frame 3D */}
+                    <linearGradient id="screenFrame3d" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#404040" stopOpacity="0.95"/>
+                      <stop offset="50%" stopColor="#1a1a1a" stopOpacity="0.98"/>
+                      <stop offset="100%" stopColor="#0a0a0a" stopOpacity="0.95"/>
+                    </linearGradient>
+                    
+                    {/* Desk Top 3D */}
+                    <linearGradient id="deskTop3d" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#8b6f47" stopOpacity="0.5"/>
+                      <stop offset="100%" stopColor="#5d4037" stopOpacity="0.4"/>
+                    </linearGradient>
+                    
+                    {/* Desk Side 3D */}
+                    <linearGradient id="deskSide3d" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#6d4c41" stopOpacity="0.3"/>
+                      <stop offset="100%" stopColor="#3e2723" stopOpacity="0.25"/>
+                    </linearGradient>
+                    
+                    {/* Person Head 3D */}
+                    <radialGradient id="headGradient3d" cx="50%" cy="40%" r="60%">
+                      <stop offset="0%" stopColor="#ffd4a3" stopOpacity="1"/>
+                      <stop offset="100%" stopColor="#e6b894" stopOpacity="0.95"/>
+                    </radialGradient>
+                    
+                    {/* Person Body 3D */}
+                    <linearGradient id="bodyGradient3d" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#90caf9" stopOpacity="0.9"/>
+                      <stop offset="100%" stopColor="#5c9bd4" stopOpacity="0.85"/>
+                    </linearGradient>
+                    
+                    {/* Shadow Filters */}
+                    <filter id="shadow3d" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+                      <feOffset dx="3" dy="5" result="offsetblur"/>
+                      <feComponentTransfer>
+                        <feFuncA type="linear" slope="0.5"/>
+                      </feComponentTransfer>
+                      <feMerge>
+                        <feMergeNode/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                    
+                    <filter id="glow3d">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                      <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                    
+                    {/* Lighting Effect */}
+                    <radialGradient id="lighting3d" cx="30%" cy="20%" r="50%">
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3"/>
+                      <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
+                    </radialGradient>
+                  </defs>
+                  
+                  {/* Background with 3D depth */}
+                  <rect width="500" height="400" fill="url(#bgGradient3d)" rx="16"/>
+                  <rect width="500" height="400" fill="url(#lighting3d)" rx="16"/>
+                  
+                  {/* Desk/Table - 3D Perspective */}
+                  {/* Desk Top */}
+                  <rect x="50" y="280" width="400" height="20" rx="4" fill="url(#deskTop3d)" filter="url(#shadow3d)"/>
+                  {/* Desk Front Edge - 3D depth */}
+                  <polygon points="50,300 450,300 460,310 40,310" fill="url(#deskSide3d)"/>
+                  {/* Desk Side */}
+                  <rect x="50" y="300" width="400" height="80" rx="8" fill="url(#deskSide3d)" opacity="0.3"/>
+                  
+                  {/* Laptop Base - 3D with depth */}
+                  <rect x="120" y="240" width="260" height="20" rx="4" fill="url(#laptopBase3d)" filter="url(#shadow3d)"/>
+                  {/* Laptop Base Front Edge */}
+                  <polygon points="120,240 380,240 385,245 115,245" fill="rgba(20,20,20,0.8)"/>
+                  {/* Keyboard Area */}
+                  <rect x="130" y="250" width="240" height="8" rx="2" fill="rgba(0,0,0,0.7)"/>
+                  {/* Keyboard Keys 3D */}
+                  <rect x="140" y="252" width="15" height="4" rx="1" fill="rgba(60,60,60,0.8)"/>
+                  <rect x="160" y="252" width="15" height="4" rx="1" fill="rgba(60,60,60,0.8)"/>
+                  <rect x="180" y="252" width="15" height="4" rx="1" fill="rgba(60,60,60,0.8)"/>
+                  <rect x="200" y="252" width="15" height="4" rx="1" fill="rgba(60,60,60,0.8)"/>
+                  
+                  {/* Laptop Screen - 3D Tilted View */}
+                  {/* Screen Back/Frame */}
+                  <polygon points="120,100 380,100 385,105 115,105" fill="url(#screenFrame3d)" opacity="0.9"/>
+                  {/* Screen Main */}
+                  <rect x="120" y="100" width="260" height="140" rx="6" fill="url(#screenFrame3d)" filter="url(#shadow3d)"/>
+                  {/* Screen Inner Glow */}
+                  <rect x="130" y="110" width="240" height="120" rx="4" fill="url(#screenGradient3d)"/>
+                  {/* Screen Reflection */}
+                  <rect x="130" y="110" width="240" height="40" rx="4" fill="rgba(255,255,255,0.1)"/>
+                  
+                  {/* Exam Interface on Screen - 3D */}
+                  <rect x="140" y="120" width="220" height="20" rx="3" fill="rgba(0,229,255,0.8)" filter="url(#glow3d)"/>
+                  <text x="250" y="135" fontSize="12" fill="rgba(255,255,255,0.95)" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="bold">Online Exam - Question 5 of 20</text>
+                  
+                  {/* Questions with 3D depth */}
+                  <rect x="150" y="150" width="200" height="12" rx="2" fill="rgba(255,255,255,0.6)" filter="url(#shadow3d)"/>
+                  <rect x="150" y="170" width="180" height="12" rx="2" fill="rgba(255,255,255,0.5)" filter="url(#shadow3d)"/>
+                  <rect x="150" y="190" width="190" height="12" rx="2" fill="rgba(255,255,255,0.5)" filter="url(#shadow3d)"/>
+                  <rect x="150" y="210" width="170" height="12" rx="2" fill="rgba(255,255,255,0.5)" filter="url(#shadow3d)"/>
+                  
+                  {/* Timer/Clock - 3D */}
+                  <circle cx="350" cy="130" r="18" fill="rgba(255,87,34,0.4)" stroke="rgba(255,87,34,0.8)" strokeWidth="2" filter="url(#glow3d)"/>
+                  <circle cx="350" cy="130" r="15" fill="rgba(255,87,34,0.2)"/>
+                  <text x="350" y="137" fontSize="10" fill="rgba(255,255,255,0.95)" textAnchor="middle" fontFamily="Arial" fontWeight="bold">45</text>
+                  
+                  {/* Person/Student - Head 3D */}
+                  <circle cx="250" cy="80" r="25" fill="url(#headGradient3d)" filter="url(#shadow3d)"/>
+                  {/* Head highlight */}
+                  <ellipse cx="245" cy="75" rx="8" ry="10" fill="rgba(255,255,255,0.3)"/>
+                  {/* Eyes */}
+                  <circle cx="245" cy="78" r="3" fill="rgba(0,0,0,0.8)"/>
+                  <circle cx="255" cy="78" r="3" fill="rgba(0,0,0,0.8)"/>
+                  {/* Eye highlights */}
+                  <circle cx="246" cy="77" r="1" fill="rgba(255,255,255,0.9)"/>
+                  <circle cx="256" cy="77" r="1" fill="rgba(255,255,255,0.9)"/>
+                  {/* Smile */}
+                  <path d="M245 85 Q250 88 255 85" stroke="rgba(0,0,0,0.6)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  
+                  {/* Person - Body 3D */}
+                  <rect x="230" y="105" width="40" height="50" rx="8" fill="url(#bodyGradient3d)" filter="url(#shadow3d)"/>
+                  {/* Body highlight */}
+                  <rect x="232" y="107" width="36" height="20" rx="6" fill="rgba(255,255,255,0.2)"/>
+                  
+                  {/* Person - Arms 3D */}
+                  <ellipse cx="220" cy="125" rx="8" ry="25" fill="url(#headGradient3d)" transform="rotate(-20 220 125)" filter="url(#shadow3d)"/>
+                  <ellipse cx="280" cy="125" rx="8" ry="25" fill="url(#headGradient3d)" transform="rotate(20 280 125)" filter="url(#shadow3d)"/>
+                  
+                  {/* Webcam on Laptop - 3D */}
+                  <circle cx="250" cy="100" r="6" fill="rgba(0,229,255,0.8)" filter="url(#glow3d)"/>
+                  <circle cx="250" cy="100" r="4" fill="rgba(0,229,255,0.6)"/>
+                  <circle cx="250" cy="100" r="3" fill="rgba(255,255,255,0.95)"/>
+                  <circle cx="251" cy="99" r="1" fill="rgba(0,0,0,0.3)"/>
+                  
+                  {/* Proctoring Camera Indicator (Top Right) - 3D */}
+                  <circle cx="420" cy="60" r="12" fill="rgba(0,229,255,0.7)" stroke="rgba(0,229,255,1)" strokeWidth="2" filter="url(#glow3d)">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="420" cy="60" r="8" fill="rgba(0,229,255,0.5)"/>
+                  <circle cx="420" cy="60" r="6" fill="rgba(255,255,255,0.95)"/>
+                  <circle cx="421" cy="59" r="2" fill="rgba(0,0,0,0.3)"/>
+                  <text x="420" y="85" fontSize="9" fill="rgba(255,255,255,0.9)" textAnchor="middle" fontFamily="Arial" fontWeight="bold">Camera</text>
+                  
+                  {/* AI Monitoring Indicators - 3D */}
+                  <circle cx="80" cy="60" r="8" fill="rgba(76,175,80,0.9)" filter="url(#glow3d)">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="80" cy="60" r="5" fill="rgba(76,175,80,0.6)"/>
+                  <circle cx="100" cy="60" r="8" fill="rgba(76,175,80,0.9)" filter="url(#glow3d)">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="100" cy="60" r="5" fill="rgba(76,175,80,0.6)"/>
+                  <circle cx="120" cy="60" r="8" fill="rgba(76,175,80,0.9)" filter="url(#glow3d)">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" begin="0.6s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="120" cy="60" r="5" fill="rgba(76,175,80,0.6)"/>
+                  <text x="100" y="85" fontSize="9" fill="rgba(255,255,255,0.9)" textAnchor="middle" fontFamily="Arial" fontWeight="bold">AI Active</text>
+                  
+                  {/* Face Detection Overlay - 3D */}
+                  <ellipse cx="250" cy="80" rx="35" ry="40" fill="none" stroke="rgba(0,229,255,0.6)" strokeWidth="2.5" strokeDasharray="5 5" filter="url(#glow3d)">
+                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite"/>
+                  </ellipse>
+                  
+                  {/* Security Shield Badge - 3D */}
+                  <path d="M250 30 L270 40 L270 55 Q270 60 250 65 Q230 60 230 55 L230 40 Z" fill="rgba(0,229,255,0.8)" stroke="rgba(0,229,255,1)" strokeWidth="2.5" filter="url(#glow3d)"/>
+                  <path d="M245 48 L250 52 L255 48" stroke="rgba(255,255,255,0.95)" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+                  {/* Shield highlight */}
+                  <path d="M250 35 L265 42 L265 50 Q265 52 250 55" fill="rgba(255,255,255,0.3)"/>
+                  
+                  {/* Status Bar at Bottom - 3D */}
+                  <rect x="120" y="320" width="260" height="35" rx="6" fill="rgba(0,0,0,0.5)" stroke="rgba(0,229,255,0.6)" strokeWidth="1.5" filter="url(#shadow3d)"/>
+                  <rect x="135" y="328" width="80" height="8" rx="2" fill="rgba(0,229,255,0.8)" filter="url(#glow3d)"/>
+                  <text x="175" y="336" fontSize="8" fill="rgba(255,255,255,0.95)" textAnchor="middle" fontFamily="Arial" fontWeight="bold">Proctoring Active</text>
+                  <circle cx="320" cy="340" r="5" fill="rgba(76,175,80,1)" filter="url(#glow3d)">
+                    <animate attributeName="opacity" values="0.8;1;0.8" dur="1.5s" repeatCount="indefinite"/>
+                  </circle>
+                  <text x="335" y="344" fontSize="8" fill="rgba(255,255,255,0.9)" fontFamily="Arial" fontWeight="bold">Monitoring</text>
+                  
+                  {/* Tab Switching Detection Indicator - 3D */}
+                  <rect x="360" y="200" width="30" height="20" rx="3" fill="rgba(255,87,34,0.4)" stroke="rgba(255,87,34,0.9)" strokeWidth="2" filter="url(#glow3d)"/>
+                  <rect x="362" y="202" width="26" height="16" rx="2" fill="rgba(255,87,34,0.2)"/>
+                  <text x="375" y="213" fontSize="8" fill="rgba(255,255,255,0.95)" textAnchor="middle" fontFamily="Arial" fontWeight="bold">Tab</text>
+                  <text x="375" y="222" fontSize="7" fill="rgba(255,255,255,0.8)" textAnchor="middle" fontFamily="Arial">Monitor</text>
+                </Box>
               </MotionBox>
             </MotionGrid>
           </Grid>
           
-          {/* Stats section below hero */}
+          {/* Quick Actions section below hero */}
           <MotionBox
             sx={{ 
               mt: { xs: 6, md: 10 },
-              p: 3,
-              backgroundColor: 'rgba(255,255,255,0.05)',
-              backdropFilter: 'blur(10px)',
-              borderRadius: 4,
-              boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-              border: '1px solid rgba(255,255,255,0.1)'
             }}
             variants={fadeIn}
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            <Grid container spacing={2} justifyContent="space-between">
-              {stats.map((stat, index) => (
-                <Grid item xs={6} md={3} key={index} sx={{ textAlign: 'center' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Box sx={{ 
-                      mb: 1, 
-                      color: '#00e5ff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      {stat.icon}
+            <Grid container spacing={2}>
+              {quickActions.map((action, index) => (
+                <Grid item xs={12} sm={6} md={3} key={index}>
+                  <MotionBox
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    component={action.link.startsWith('#') ? 'a' : Link}
+                    to={action.link.startsWith('#') ? undefined : action.link}
+                    href={action.link.startsWith('#') ? action.link : undefined}
+                    sx={{
+                      display: 'block',
+                      textDecoration: 'none',
+                      height: '100%'
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        p: 3,
+                        backgroundColor: 'rgba(255,255,255,0.08)',
+                        backdropFilter: 'blur(10px)',
+                        borderRadius: 3,
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          backgroundColor: 'rgba(255,255,255,0.12)',
+                          borderColor: 'rgba(0,229,255,0.4)',
+                          boxShadow: '0 8px 24px rgba(0,229,255,0.2)'
+                        }
+                      }}
+                    >
+                      <Box sx={{ 
+                        mb: 2, 
+                        color: action.color,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        {action.icon}
+                      </Box>
+                      <Typography 
+                        variant="h6" 
+                        fontWeight="600" 
+                        sx={{ 
+                          mb: 1,
+                          color: 'white',
+                          textAlign: 'center'
+                        }}
+                      >
+                        {action.title}
+                      </Typography>
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          opacity: 0.85,
+                          color: 'white',
+                          textAlign: 'center',
+                          fontSize: '0.875rem',
+                          lineHeight: 1.5
+                        }}
+                      >
+                        {action.description}
+                      </Typography>
                     </Box>
-                    <Typography variant="h4" fontWeight="bold" sx={{ mb: 0.5 }}>
-                      {stat.value}
-                    </Typography>
-                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                      {stat.label}
-                    </Typography>
-                  </Box>
+                  </MotionBox>
                 </Grid>
               ))}
             </Grid>

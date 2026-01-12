@@ -1,5 +1,4 @@
-// Element to display the status
-// var statusText = document.getElementById("status");
+
 
 // Tab switch tracking variables
 var tabSwitchCount = 0;
