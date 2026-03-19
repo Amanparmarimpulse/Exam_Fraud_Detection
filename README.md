@@ -1,14 +1,15 @@
 # Autonomous Online Exam Fraud Detection
 
-## Description / Overview
+## Description
 
-This project focuses on building a secure and intelligent online examination system using Artificial Intelligence (AI) and Machine Learning (ML).
+This project presents a **secure and intelligent online examination system** powered by **Artificial Intelligence (AI)** and **Machine Learning (ML)**.
 
-With the rapid growth of online education, ensuring fairness and preventing cheating has become essential. This system detects suspicious activities in real time using biometric verification, behavioral analysis, and video monitoring.
+With the rapid rise of online education, maintaining **fairness, credibility, and integrity** in assessments has become critical. This system addresses these challenges by detecting **suspicious activities in real time** using **biometric verification**, **behavioral analysis**, and **video monitoring**.
 
-It is designed for educational institutions conducting large-scale online assessments.
+It is specifically designed for **educational institutions** conducting **large-scale online examinations**, ensuring a **reliable and scalable solution** for modern digital assessments.
 
 ---
+
 
 ## Demo
 
