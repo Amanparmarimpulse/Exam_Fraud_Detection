@@ -79,56 +79,28 @@ Explore the deployed application here:
   * Unusual audio patterns
 ---
 
+## References
+
+The development of this project was supported by the following resources:
+
+* 📄 **Google Cloud Video Intelligence API Documentation**
+  https://cloud.google.com/video-intelligence/docs
+  Used for **video analysis, object detection, and label extraction**.
+
+* 📑 **Research Papers on AI-based Fraud Detection**
+  https://www.researchgate.net/
+  Referenced for understanding **machine learning techniques in fraud detection systems**.
+
+* 📘 **Plagiarism & Online Cheating Detection Studies (SciTePress)**
+  https://www.scitepress.org/
+  Provided insights into **behavior analysis and cheating detection methodologies**.
+
+* 🔍 **Firebase Documentation**
+  https://firebase.google.com/docs
+  Used for **authentication and database integration**.
 
 ---
 
-## Features
-
-* Real-time fraud detection using AI/ML
-* Face recognition and identity verification
-* Keystroke dynamics analysis
-* Object and person tracking via video
-* Speech transcription for anomaly detection
-* Tab switching detection
-* Scalable for large exam environments
-
----
-
-## Tech Stack / Built With
-
-* Frontend: React, HTML, CSS
-* Backend: Node.js
-* Database: Firebase Firestore
-* Authentication: Firebase Auth
-* AI/ML Models:
-
-  * CNN (Face Recognition)
-  * LSTM (Movement Detection)
-  * Keystroke Dynamics
-* Cloud Services:
-
-  * Google Cloud Video Intelligence API
-  * Zoom SDK (Recording)
-
----
-
-## Contributing
-
-Contributions are welcome.
-
-Steps:
-
-1. Fork the repository
-2. Create a new branch
-3. Submit a pull request
-
----
-
-## License
-
-This project is licensed under the MIT License.
-
----
 
 ## Credits / Acknowledgments
 
