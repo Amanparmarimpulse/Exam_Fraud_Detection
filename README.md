@@ -49,6 +49,8 @@ Explore the deployed application here:
 
 ## Usage
 
+⚠️⚠️ **Note:** This is a **modular implementation**, where each feature (video analysis, tab detection, etc.) is developed as **separate functional components**, rather than a fully integrated production system.
+
 * **User Authentication**
   Register/Login using Firebase authentication.
 
@@ -75,9 +77,6 @@ Explore the deployed application here:
   * Unauthorized objects
   * Tab switching behavior
   * Unusual audio patterns
-
-⚠️⚠️ **Note:** This is a **modular implementation**, where each feature (video analysis, tab detection, etc.) is developed as **separate functional components**, rather than a fully integrated production system.
-
 ---
 
 
