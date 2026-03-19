@@ -49,15 +49,37 @@ Explore the deployed application here:
 
 ## Usage
 
-* Register/Login using Firebase authentication
-* Start an online exam session
-* The system monitors:
+* **User Authentication**
+  Register/Login using Firebase authentication.
 
-  * Face presence and identity
-  * Object detection (unauthorized items)
+* **System Compatibility Check**
+  Ensures the user’s system (camera, browser, permissions) is ready for monitoring.
+
+* **Video Recording & Processing**
+  Captures exam session video and sends it to **Google Cloud Video Intelligence API** for analysis.
+
+* **AI-Based Analysis**
+  The system processes recorded video to:
+
+  * Detect **faces and multiple persons**
+  * Identify **objects and labels** (unauthorized items)
+  * Convert **speech to text** for audio monitoring
+
+* **Browser Activity Monitoring**
+  Tracks **tab and window switching** during the session.
+
+* **Fraud Indicators**
+  Flags suspicious activities based on:
+
+  * Presence of multiple faces
+  * Unauthorized objects
   * Tab switching behavior
-  * Audio activity
-* Suspicious activities are flagged in real time
+  * Unusual audio patterns
+
+⚠️⚠️ **Note:** This is a **modular implementation**, where each feature (video analysis, tab detection, etc.) is developed as **separate functional components**, rather than a fully integrated production system.
+
+---
+
 
 ---
 
