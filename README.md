@@ -124,7 +124,3 @@ This work was carried out under the supervision of:
 ---
 
 We sincerely thank our mentor for their continuous guidance, support, and valuable insights throughout the development of this project.
-
-## Conclusion
-
-This system integrates AI, machine learning, and biometric verification to ensure fair and secure online examinations. It provides a scalable and efficient solution for modern digital assessment platforms.
