@@ -15,7 +15,9 @@ It is specifically designed for **educational institutions** conducting **large-
 
 🌐 **Live Project**
 Explore the deployed application here:
+ ```bash
 **https://exam-fraud-detection-6i7f.vercel.app/**
+```
 
 ---
 
