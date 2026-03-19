@@ -13,7 +13,7 @@ It is specifically designed for **educational institutions** conducting **large-
 
 ## Demo
 
-🌐 **Live Project**
+**Live Project:-**
 Explore the deployed application here:
 **https://exam-fraud-detection-6i7f.vercel.app/**
 
