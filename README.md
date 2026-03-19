@@ -12,8 +12,9 @@ It is designed for educational institutions conducting large-scale online assess
 
 ## Demo
 
-* Live Project: https://exam-fraud-detection-6i7f.vercel.app/
-* Demo Video: https://drive.google.com/file/d/17aSot53-ntFL-OXYGqSGrNUgw-_NgQiq/view
+🌐 **Live Project**
+Explore the deployed application here:
+**https://exam-fraud-detection-6i7f.vercel.app/**
 
 ---
 
