@@ -17,7 +17,6 @@ It is specifically designed for **educational institutions** conducting **large-
 Explore the deployed application here:
 **https://exam-fraud-detection-6i7f.vercel.app/**
 
-Note:- Currently not connected with login and sign part.
 ---
 
 ## Installation
