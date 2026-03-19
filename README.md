@@ -114,7 +114,7 @@ This project was developed through the collaborative efforts of:
 * **Devika Verma (UI22EC19)**
 * **Aman Parmar (UI22EC07)**
 
-### Guidance & Mentorship
+### 🎓 Guidance & Mentorship
 
 This work was carried out under the supervision of:
 
@@ -122,6 +122,7 @@ This work was carried out under the supervision of:
 *Associate Professor, IIIT Surat*
 
 ---
+
 We sincerely thank our mentor for their continuous guidance, support, and valuable insights throughout the development of this project.
 
 ## Conclusion
